@@ -2,9 +2,11 @@ package dev.lyze.gdxUnBox2d;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.utils.Array;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.var;
 
 /**
  * Main game object of the UnBox library. Holds a Box2D body and behaviours.
@@ -68,5 +70,45 @@ public final class GameObject {
         }
 
         body.setActive(enabled);
+    }
+
+    /**
+     * Gets the first behaviour instance with the specified type of this game object.
+     * @param behaviourClass The class type we want to search for.
+     * @return The found behaviour or null.
+     */
+    public <T extends Behaviour> T getBehaviour(Class<T> behaviourClass) {
+        for (var behaviour : unBox.gameObjects.get(this)) {
+            if (behaviour.getClass().equals(behaviourClass))
+                return behaviourClass.cast(behaviour);
+        }
+
+        return null;
+    }
+
+    /**
+     * Gets the all behaviour instance with the specified type of this game object. Allocations an array inside this method.
+     * @param behaviourClass The class type we want to search for.
+     * @return The found behaviour or null.
+     */
+    public <T extends Behaviour> Array<T> getBehaviours(Class<T> behaviourClass) {
+        return getBehaviours(behaviourClass, new Array<T>());
+    }
+
+    /**
+     * Gets the all behaviour instance with the specified type of this game object.
+     * @param behaviourClass The class type we want to search for.
+     * @param tempStorage A temporary array to store all behaviours in it. Therefore, there's no array allocation happening in this method.
+     * @return All found behaviours or empty array.
+     */
+    public <T extends Behaviour> Array<T> getBehaviours(Class<T> behaviourClass, Array<T> tempStorage) {
+        tempStorage.clear();
+
+        for (var behaviour : unBox.gameObjects.get(this)) {
+            if (behaviour.getClass().equals(behaviourClass))
+                tempStorage.add(behaviourClass.cast(behaviour));
+        }
+
+        return tempStorage;
     }
 }

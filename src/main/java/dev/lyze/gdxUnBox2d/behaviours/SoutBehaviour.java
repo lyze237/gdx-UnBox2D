@@ -11,11 +11,11 @@ import dev.lyze.gdxUnBox2d.GameObject;
 import lombok.Getter;
 import lombok.Setter;
 
-public class SoutBehaviours extends Behaviour {
+public class SoutBehaviour extends Behaviour {
     @Getter @Setter private boolean logUpdates;
     @Getter @Setter private String name;
 
-    public SoutBehaviours(String name, boolean logContinuousElements, GameObject gameObject) {
+    public SoutBehaviour(String name, boolean logContinuousElements, GameObject gameObject) {
         super(gameObject);
 
         this.name = name;
