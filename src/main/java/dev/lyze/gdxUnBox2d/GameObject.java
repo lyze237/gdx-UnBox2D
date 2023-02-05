@@ -133,4 +133,19 @@ public final class GameObject {
 
         return tempStorage;
     }
+
+    /**
+     * Marks the game object and all its behaviour for deletion at the end of the current frame.
+     */
+    public void destroy() {
+        getUnBox().destroy(this);
+    }
+
+    /**
+     * Marks the behaviour for deletion at the end of the current frame.
+     * @param behaviour The behaviour instance to remove.
+     */
+    public void destroy(Behaviour behaviour) {
+        getUnBox().destroy(behaviour);
+    }
 }

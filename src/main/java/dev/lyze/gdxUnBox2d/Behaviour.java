@@ -105,4 +105,11 @@ public abstract class Behaviour {
      * For example if you {@link UnBox#destroy(GameObject)} the game object or the behaviour itself.
      */
     public abstract void onDestroy();
+
+    /**
+     * Marks the behaviour for deletion at the end of the current frame.
+     */
+    public void destroy() {
+        getGameObject().getUnBox().destroy(this);
+    }
 }
