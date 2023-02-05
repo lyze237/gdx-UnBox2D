@@ -124,8 +124,8 @@ public class UnBox {
 
             updateFixedObjects();
 
-            contactListener.update();
             world.step(timeStep, physicsOptions.getVelocityIteration(), physicsOptions.getPositionIterations());
+            contactListener.update();
             accumulator -= timeStep;
         }
     }
