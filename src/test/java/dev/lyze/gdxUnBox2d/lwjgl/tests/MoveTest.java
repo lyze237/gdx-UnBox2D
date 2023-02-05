@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
-import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviours;
+import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.lwjgl.LibgdxLwjglUnitTest;
 import lombok.var;
 import org.junit.jupiter.api.Tag;
@@ -37,8 +37,8 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         var rightGo = new GameObject(unBox);
         var leftGo = new GameObject(unBox);
 
-        new SoutBehaviours("Right GO", false, rightGo);
-        new SoutBehaviours("Left GO", false, leftGo);
+        new SoutBehaviour("Right GO", false, rightGo);
+        new SoutBehaviour("Left GO", false, leftGo);
 
         new MoveBehaviour(true, rightGo);
         new MoveBehaviour(false, leftGo);
