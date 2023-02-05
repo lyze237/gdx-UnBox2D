@@ -1,0 +1,126 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        google()
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+        gradlePluginPortal()
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'io.freefair.lombok' version '6.3.0'
+    id 'com.diffplug.spotless' version '6.0.5'
+}
+
+apply from: 'utils.gradle'
+group 'lyze.dev'
+version '1.0.' + getGitHash()
+apply from: 'publishing.gradle'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+
+    implementation "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+
+    testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+
+    testImplementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+spotless {
+    lineEndings 'UNIX'
+
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
+    }
+
+    java {
+        importOrder()
+
+        indentWithSpaces(4)
+
+        eclipse().configFile('eclipse-formatter.xml')
+    }
+
+    groovyGradle {
+        target '*.gradle'
+        greclipse().configFile('eclipse-formatter.xml')
+    }
+}
+
+java {
+    sourceCompatibility = 7
+    targetCompatibility = 7
+}
+
+compileTestJava {
+    sourceCompatibility = 8
+    targetCompatibility = 8
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        exceptionFormat = "full"
+        showStackTraces = true
+        showExceptions = true
+        showCauses = true
+        displayGranularity = 0
+        events = [
+            "standardOut",
+            "standardError",
+            "started",
+            "passed",
+            "skipped",
+            "failed"
+        ]
+        showStandardStreams = true
+    }
+
+    reports {
+        junitXml.configure {
+            enabled(true)
+        }
+    }
+
+    if (project.hasProperty("lwjgl")) {
+        useJUnitPlatform {
+            includeTags "lwjgl"
+        }
+    } else {
+        useJUnitPlatform {
+            excludeTags 'lwjgl'
+        }
+    }
+}
+
+compileJava {
+    options.incremental = true
+}
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
