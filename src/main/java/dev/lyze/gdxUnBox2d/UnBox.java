@@ -285,7 +285,7 @@ public class UnBox {
         for (var gameObject : gameObjects)
             for (var behaviour : gameObject.value)
                 if (behaviour.getClass().equals(behaviourClass))
-                    tempStorage.add(behaviourClass.cast(behaviour));
+                    tempStorage.add((T) behaviour);
 
         return tempStorage;
     }
