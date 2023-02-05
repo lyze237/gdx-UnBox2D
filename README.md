@@ -41,8 +41,8 @@ public class CoolGame extends Game {
         var leftGo = new GameObject(unBox);
         
         // Attach a logging behaviour to both of the game objects
-        new SoutBehaviours("Right GO", false, rightGo);
-        new SoutBehaviours("Left GO", false, leftGo);
+        new SoutBehaviour("Right GO", false, rightGo);
+        new SoutBehaviour("Left GO", false, leftGo);
 
         // Attach a movement behaviour to both game objects
         new MoveBehaviour(true, rightGo);
