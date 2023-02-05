@@ -16,6 +16,8 @@ public final class GameObject {
 
     @Getter private boolean enabled;
 
+    @Getter @Setter private String name;
+
     @Getter @Setter(AccessLevel.PACKAGE) private Body body;
 
     /**
@@ -23,27 +25,48 @@ public final class GameObject {
      * @param unBox The libraries instance.
      */
     public GameObject(UnBox unBox) {
-        this(unBox, true);
+        this("Game Object", unBox);
+    }
+
+    /**
+     * Creates a new enabled game object with a dynamic body.
+     * @param name The name of the game object.
+     * @param unBox The libraries instance.
+     */
+    public GameObject(String name, UnBox unBox) {
+        this(name, true, unBox);
+    }
+
+    /**
+     * Creates a new enabled game object with a dynamic body.
+     * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
+     * @param unBox The libraries instance.
+     */
+    public GameObject(boolean enabled, UnBox unBox) {
+        this("Game Object", enabled, unBox);
     }
 
     /**
      * Creates a new game object with a dynamic body.
-     * @param unBox The libraries instance.
+     * @param name The name of the game object.
      * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
+     * @param unBox The libraries instance.
      */
-    public GameObject(UnBox unBox, boolean enabled) {
-        this(unBox, enabled, null);
+    public GameObject(String name, boolean enabled, UnBox unBox) {
+        this(name, enabled, null, unBox);
     }
 
     /**
      * Creates a new game object.
-     * @param unBox The libraries instance.
+     * @param name The name of the game object.
      * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
      * @param bodyDef The initial body definition in case you want it to be directly static or something else.
+     * @param unBox The libraries instance.
      */
-    public GameObject(UnBox unBox, boolean enabled, BodyDef bodyDef) {
+    public GameObject(String name, boolean enabled, BodyDef bodyDef, UnBox unBox) {
         this.unBox = unBox;
         this.enabled = enabled;
+        this.name = name;
 
         if (bodyDef == null) {
             bodyDef = new BodyDef();
