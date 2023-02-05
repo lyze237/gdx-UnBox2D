@@ -14,7 +14,7 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
         var unBox = new UnBox();
 
         var enabledGo = new GameObject(unBox);
-        var disabledGo = new GameObject(unBox, false);
+        var disabledGo = new GameObject(false, unBox);
 
         new SoutBehaviour("Enabled GO", true, enabledGo);
         new SoutBehaviour("Disabled GO", true, disabledGo);
