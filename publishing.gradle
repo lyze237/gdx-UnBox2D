@@ -1,0 +1,39 @@
+task delombokedSourcesJars(type: Jar, dependsOn: classes) {
+    from sourceSets.main.delombokTask {
+        include "**/*.java"
+        filter { String line -> line.replaceAll('^\\s*import lombok\\..*$', '') }
+    }
+    from('src/main/resources') {
+        include '**/*'
+    }
+    archiveClassifier.set("sources")
+}
+
+javadoc {
+    source = sourceSets.main.delombokTask
+    failOnError = false
+}
+
+java {
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        gdxUnBox2d(MavenPublication) {
+            pom {
+                name = "gdx-UnBox2D"
+                description = "A libGDX library to couple Unity's behaviour system and execution order with Box2D."
+                url = "https://github.com/lyze237/gdx-UnBox2D"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+            }
+            from components.java
+            artifact delombokedSourcesJars
+        }
+    }
+}
