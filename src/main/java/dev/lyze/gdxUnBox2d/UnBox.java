@@ -1,5 +1,7 @@
 package dev.lyze.gdxUnBox2d;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -13,6 +15,17 @@ import lombok.Getter;
 import lombok.var;
 
 // https://docs.unity3d.com/Manual/ExecutionOrder.html
+
+/**
+ * <p>
+ * The main object of the library.
+ * Holds all game objects and behaviours.
+ * Additionally, calculates physics with Box2D.
+ * </p>
+ * <p>
+ * Make sure to call {@link UnBox#preRender(float)}, {@link UnBox#render(Batch)}, {@link UnBox#postRender()} in your {@link ApplicationListener#render()} loop in this order.
+ * </p>
+ */
 public class UnBox {
     @Getter private final PhysicsOptions physicsOptions = new PhysicsOptions();
 
@@ -28,15 +41,28 @@ public class UnBox {
 
     private final WorldContactListener contactListener;
 
+    /**
+     * Instantiates an instance of this object with gravity set to (0, -10) and doSleep set to true.
+     */
     public UnBox() {
         this(new Vector2(0, -10), true);
     }
 
+    /**
+     * Instantiates an instance of this object with physics set to (0, -10) and body sleep set to true.
+     * @param gravity The gravity of the Box2D world.
+     * @param doSleep Ignore physics simulation for inactive Box2D bodies.
+     */
     public UnBox(Vector2 gravity, boolean doSleep) {
         world = new World(gravity, doSleep);
         world.setContactListener(contactListener = new WorldContactListener(this));
     }
 
+    /**
+     * Starts behaviours, calls {@link UnBox#fixedUpdate(float)}, {@link UnBox#updateGameObjects(float)} and {@link UnBox#lateUpdateGameObjects(float)}.o
+     * Call this at the beginning of your render loop.
+     * @param delta The delta time compared to the previous time. {@link Graphics#getDeltaTime()}
+     */
     public void preRender(float delta) {
         startBehaviours();
 
@@ -45,14 +71,25 @@ public class UnBox {
         lateUpdateGameObjects(delta);
     }
 
+    /**
+     * Renders behaviours. Call this after {@link UnBox#preRender(float)}.
+     * @param batch The batch used to render the behaviours.
+     */
     public void render(Batch batch) {
         renderGameObjects(batch);
     }
 
+    /**
+     * Renders behaviours with a shape renderer, therefore commonly used for debugging. Call this after {@link UnBox#preRender(float)}.
+     * @param renderer The shape renderer used to render the behaviours.
+     */
     public void debugRender(ShapeRenderer renderer) {
         debugRenderGameObjects(renderer);
     }
 
+    /**
+     * Instantiates and destroys pending game objects or behaviours. Call this after {@link UnBox#render(Batch)}.
+     */
     public void postRender() {
         instantiateGameObjects();
         instantiateBehaviours();
@@ -197,14 +234,27 @@ public class UnBox {
         behavioursToAdd.add(behaviour);
     }
 
+    /**
+     * Marks the behaviour for deletion at the end of the current frame.
+     * @param behaviour The behaviour instance to remove.
+     */
     public void destroy(Behaviour behaviour) {
         behavioursToDestroy.add(behaviour);
     }
 
-    public void destroy(GameObject obj) {
-        gameObjectsToDestroy.add(obj);
+    /**
+     * Marks the game object and all its behaviour for deletion at the end of the current frame.
+     * @param go The behaviour instance to remove.
+     */
+    public void destroy(GameObject go) {
+        gameObjectsToDestroy.add(go);
     }
 
+    /**
+     * Helper method to find the game object based on a Box2D Body.
+     * @param body The Box2D body to search for.
+     * @return The GameObject if found, or null.
+     */
     public GameObject findGameObject(Body body) {
         for (var gameObject : gameObjects) {
             if (gameObject.key.getBody().equals(body))
