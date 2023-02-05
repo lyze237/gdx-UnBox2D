@@ -263,4 +263,30 @@ public class UnBox {
 
         return null;
     }
+
+    /**
+     * Finds all behaviour instances with the specified type. Allocations an array inside this method.
+     * @param behaviourClass The class type we want to search for.
+     * @return The found behaviour or null.
+     */
+    public <T extends Behaviour> Array<T> findBehaviours(Class<T> behaviourClass) {
+        return findBehaviours(behaviourClass, new Array<T>());
+    }
+
+    /**
+     * Finds all behaviour instances with the specified type.
+     * @param behaviourClass The class type we want to search for.
+     * @param tempStorage A temporary array to store all behaviours in it. Therefore, there's no array allocation happening in this method.
+     * @return All found behaviours or empty array.
+     */
+    public <T extends Behaviour> Array<T> findBehaviours(Class<T> behaviourClass, Array<T> tempStorage) {
+        tempStorage.clear();
+
+        for (var gameObject : gameObjects)
+            for (var behaviour : gameObject.value)
+                if (behaviour.getClass().equals(behaviourClass))
+                    tempStorage.add(behaviourClass.cast(behaviour));
+
+        return tempStorage;
+    }
 }
