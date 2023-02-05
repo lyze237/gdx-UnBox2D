@@ -80,7 +80,7 @@ public final class GameObject {
     public <T extends Behaviour> T getBehaviour(Class<T> behaviourClass) {
         for (var behaviour : unBox.gameObjects.get(this)) {
             if (behaviour.getClass().equals(behaviourClass))
-                return behaviourClass.cast(behaviour);
+                return (T) behaviour;
         }
 
         return null;
@@ -106,7 +106,7 @@ public final class GameObject {
 
         for (var behaviour : unBox.gameObjects.get(this))
             if (behaviour.getClass().equals(behaviourClass))
-                tempStorage.add(behaviourClass.cast(behaviour));
+                tempStorage.add((T) behaviour);
 
         return tempStorage;
     }
