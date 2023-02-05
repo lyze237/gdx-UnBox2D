@@ -5,6 +5,7 @@ A libGDX library to couple Unity's behaviour system and execution order with Box
 [![License](https://img.shields.io/github/license/lyze237/gdx-UnBox2D)](https://github.com/lyze237/gdx-UnBox2D/blob/main/LICENSE)
 [![Jitpack](https://jitpack.io/v/lyze237/gdx-UnBox2D.svg)](https://jitpack.io/#lyze237/gdx-UnBox2D)
 [![Donate](https://img.shields.io/badge/Donate-%3C3-red)](https://coffee.lyze.dev)
+[![Donate](https://img.shields.io/badge/JavaDoc-blue)](https://coffee.lyze.dev)
 
 ## What is this whole thing about?
 
