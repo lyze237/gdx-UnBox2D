@@ -14,6 +14,10 @@ A libGDX library to couple Unity's behaviour system and execution order with Box
   * Physics steps run at the correct time (fixedUpdate, ...)
   * All your Behaviours receive proper physics notifications (onCollisionEnter, ...) 
 
+## Installation and Tutorial
+
+Check the [wiki](https://github.com/lyze237/gdx-UnBox2D/wiki) for infos!
+
 ## Example
 
 ```java
