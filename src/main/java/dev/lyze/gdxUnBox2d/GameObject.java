@@ -101,10 +101,10 @@ public final class GameObject {
      * @return The found behaviour or null.
      */
     public <T extends Behaviour> T getBehaviour(Class<T> behaviourClass) {
-        for (var behaviour : unBox.gameObjects.get(this)) {
-            if (behaviour.getClass().equals(behaviourClass))
-                return (T) behaviour;
-        }
+        Array<Behaviour> behaviours = unBox.gameObjects.get(this);
+        for (var i = 0; i < behaviours.size; i++)
+            if (behaviours.get(i).getClass().equals(behaviourClass))
+                return (T) behaviours.get(i);
 
         return null;
     }
@@ -127,9 +127,10 @@ public final class GameObject {
     public <T extends Behaviour> Array<T> getBehaviours(Class<T> behaviourClass, Array<T> tempStorage) {
         tempStorage.clear();
 
-        for (var behaviour : unBox.gameObjects.get(this))
-            if (behaviour.getClass().equals(behaviourClass))
-                tempStorage.add((T) behaviour);
+        Array<Behaviour> behaviours = unBox.gameObjects.get(this);
+        for (var i = 0; i < behaviours.size; i++)
+            if (behaviours.get(i).getClass().equals(behaviourClass))
+                tempStorage.add((T) behaviours.get(i));
 
         return tempStorage;
     }
