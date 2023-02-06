@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import dev.lyze.gdxUnBox2d.Behaviour;
 import dev.lyze.gdxUnBox2d.GameObject;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class BehaviourAdapter extends Behaviour {
     public BehaviourAdapter(GameObject gameObject) {
@@ -70,6 +71,11 @@ public class BehaviourAdapter extends Behaviour {
 
     @Override
     public void debugRender(ShapeRenderer renderer) {
+
+    }
+
+    @Override
+    public void debugRender(ShapeDrawer drawer) {
 
     }
 

@@ -10,6 +10,7 @@ import dev.lyze.gdxUnBox2d.Behaviour;
 import dev.lyze.gdxUnBox2d.GameObject;
 import lombok.Getter;
 import lombok.Setter;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class SoutBehaviour extends Behaviour {
     @Getter @Setter private boolean logUpdates;
@@ -89,7 +90,13 @@ public class SoutBehaviour extends Behaviour {
     @Override
     public void debugRender(ShapeRenderer renderer) {
         if (logUpdates)
-            Gdx.app.log(name, "debugRender");
+            Gdx.app.log(name, "debugRender renderer");
+    }
+
+    @Override
+    public void debugRender(ShapeDrawer drawer) {
+        if (logUpdates)
+            Gdx.app.log(name, "debugRender drawer");
     }
 
     @Override

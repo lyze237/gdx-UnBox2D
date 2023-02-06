@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import lombok.Getter;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public abstract class Behaviour {
     @Getter private final GameObject gameObject;
@@ -79,11 +80,18 @@ public abstract class Behaviour {
     public abstract void render(Batch batch);
 
     /**
-     * A method which uses a {@link ShapeRenderer} to draw the bavhiour to the screen once a frame.
+     * A method which uses a {@link ShapeRenderer} to draw the behaviour to the screen once a frame.
      * Therefore, most commonly used to draw debug infos.
-     * @param render The shape renderer which is used to draw the bavhiour.
+     * @param render The shape renderer which is used to draw the behaviour.
      */
     public abstract void debugRender(ShapeRenderer render);
+
+    /**
+     * A method which uses a {@link ShapeDrawer} to draw the behaviour to the screen once a frame.
+     * Therefore, most commonly used to draw debug infos.
+     * @param drawer The shape renderer which is used to draw the behaviour.
+     */
+    public abstract void debugRender(ShapeDrawer drawer);
 
     /**
      * When a game object gets enabled with {@link GameObject#setEnabled(boolean)} this method gets immediately called.
