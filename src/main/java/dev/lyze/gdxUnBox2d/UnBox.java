@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
 import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
 import lombok.Getter;
@@ -118,11 +117,10 @@ public class UnBox {
                 for (var i = 0; i < behaviours.size; i++) {
                     var behaviour = behaviours.get(i);
 
-                    if (behaviour.started)
-                        continue;
-
-                    behaviour.start();
-                    behaviour.started = true;
+                    if (behaviour.getState() == BehaviourState.AWAKENED) {
+                        behaviour.start();
+                        behaviour.setState(BehaviourState.STARTED);
+                    }
                 }
             }
         }
@@ -230,6 +228,8 @@ public class UnBox {
 
             gameObjects.put(gameObject, new Array<Behaviour>());
             gameObject.setBody(world.createBody(gameObjectsToAdd.get(gameObject)));
+
+            gameObject.setState(GameObjectState.ALIVE);
         }
 
         gameObjectsToAdd.clear();
@@ -242,6 +242,9 @@ public class UnBox {
             gameObjects.get(behaviour.getGameObject()).add(behaviour);
 
             behaviour.awake();
+            behaviour.setState(BehaviourState.AWAKENED);
+
+
             if (behaviour.getGameObject().isEnabled())
                 behaviour.onEnable();
         }
@@ -260,6 +263,7 @@ public class UnBox {
                 behaviour.onDisable();
 
             behaviour.onDestroy();
+            behaviour.setState(BehaviourState.DESTROYED);
         }
 
         behavioursToDestroy.clear();
@@ -277,16 +281,21 @@ public class UnBox {
                 behavioursToDestroy.add(behaviours.get(j));
 
             gameObjects.remove(gameObject);
+            gameObject.setState(GameObjectState.DESTROYED);
         }
 
         gameObjectsToDestroy.clear();
     }
 
     void addGameObject(GameObject go, BodyDef bodyDef) {
+        go.setState(GameObjectState.ADDING);
+
         gameObjectsToAdd.put(go, bodyDef);
     }
 
     void addBehaviour(Behaviour behaviour) {
+        behaviour.setState(BehaviourState.AWAKING);
+
         behavioursToAdd.add(behaviour);
     }
 
@@ -295,14 +304,19 @@ public class UnBox {
      * @param behaviour The behaviour instance to remove.
      */
     public void destroy(Behaviour behaviour) {
+        behaviour.setState(BehaviourState.DESTROYING);
+
         behavioursToDestroy.add(behaviour);
     }
 
     /**
      * Marks the game object and all its behaviour for deletion at the end of the current frame.
+     *
      * @param go The behaviour instance to remove.
      */
     public void destroy(GameObject go) {
+        go.setState(GameObjectState.DESTROYING);
+
         gameObjectsToDestroy.add(go);
     }
 

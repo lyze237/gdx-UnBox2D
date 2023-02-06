@@ -6,13 +6,18 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public abstract class Behaviour {
     @Getter private final GameObject gameObject;
 
-    boolean started;
+    /**
+     * Lifecycle state of the behaviour.
+     */
+    @Getter @Setter(AccessLevel.PACKAGE) private BehaviourState state = BehaviourState.NOT_IN_SYSTEM;
 
     public Behaviour(GameObject gameObject) {
         this.gameObject = gameObject;

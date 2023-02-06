@@ -14,11 +14,25 @@ import lombok.var;
 public final class GameObject {
     @Getter private final UnBox unBox;
 
+    /**
+     * When the game object is enabled all its behaviours receive event calls.
+     */
     @Getter private boolean enabled;
 
+    /**
+     * A simple name for the game object.
+     */
     @Getter @Setter private String name;
 
+    /**
+     * Physics body of the game object.
+     */
     @Getter @Setter(AccessLevel.PACKAGE) private Body body;
+
+    /**
+     * Lifecycle state of the game object.
+     */
+    @Getter @Setter(AccessLevel.PACKAGE) private GameObjectState state = GameObjectState.NOT_IN_SYSTEM;
 
     /**
      * Creates a new enabled game object with a dynamic body.
