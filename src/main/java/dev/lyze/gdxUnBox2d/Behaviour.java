@@ -112,4 +112,8 @@ public abstract class Behaviour {
     public void destroy() {
         getGameObject().getUnBox().destroy(this);
     }
+
+    public UnBox getUnBox() {
+        return getGameObject().getUnBox();
+    }
 }
