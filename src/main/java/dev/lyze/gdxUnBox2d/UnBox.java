@@ -216,9 +216,15 @@ public class UnBox {
     }
 
     private void destroyGameObjects() {
-        for (var gameObject : gameObjectsToDestroy) {
-            for (var behaviour : gameObjects.get(gameObject))
-                behavioursToDestroy.add(behaviour);
+        for (int i = 0; i < gameObjectsToDestroy.size; i++) {
+            var gameObject = gameObjectsToDestroy.get(i);
+
+            contactListener.destroy(gameObject);
+            world.destroyBody(gameObject.getBody());
+
+            var behaviours = gameObjects.get(gameObject);
+            for (int j = 0; j < behaviours.size; j++)
+                behavioursToDestroy.add(behaviours.get(i));
 
             gameObjects.remove(gameObject);
         }

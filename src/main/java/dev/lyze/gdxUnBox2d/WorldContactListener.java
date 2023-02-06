@@ -96,6 +96,12 @@ public class WorldContactListener implements ContactListener {
                 break;
     }
 
+    void destroy(GameObject gameObject) {
+        for (int i = collidingEntities.size - 1; i > 0; i--)
+            if (collidingEntities.get(i).contains(gameObject))
+                collidingEntitiesPool.free(collidingEntities.removeIndex(i));
+    }
+
     private static class WorldContactListenerEntity {
         @Getter @Setter private GameObject a, b;
 
@@ -108,6 +114,10 @@ public class WorldContactListener implements ContactListener {
 
         public boolean is(GameObject a, GameObject b) {
             return (this.a == a && this.b == b) || (this.a == b & this.b == a);
+        }
+
+        public boolean contains(GameObject obj) {
+            return this.a == obj || this.b == obj;
         }
     }
 }
