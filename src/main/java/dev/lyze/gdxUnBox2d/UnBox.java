@@ -317,6 +317,11 @@ public class UnBox {
     public void destroy(GameObject go) {
         go.setState(GameObjectState.DESTROYING);
 
+        var behaviours = gameObjects.get(go);
+        for (int i = 0; i < behaviours.size; i++) {
+            behaviours.get(i).setState(BehaviourState.DESTROYING);
+        }
+
         gameObjectsToDestroy.add(go);
     }
 
