@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.badlogic.gdx.utils.OrderedMap;
 import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
 import lombok.Getter;
 import lombok.var;
@@ -32,9 +33,9 @@ public class UnBox {
 
     @Getter private final World world;
 
-    final ObjectMap<GameObject, Array<Behaviour>> gameObjects = new ObjectMap<>();
+    final OrderedMap<GameObject, Array<Behaviour>> gameObjects = new OrderedMap<>();
 
-    private final ObjectMap<GameObject, BodyDef> gameObjectsToAdd = new ObjectMap<>();
+    private final OrderedMap<GameObject, BodyDef> gameObjectsToAdd = new OrderedMap<>();
     private final Array<GameObject> gameObjectsToDestroy = new Array<>();
 
     private final Array<Behaviour> behavioursToAdd = new Array<>();
@@ -108,9 +109,15 @@ public class UnBox {
     }
 
     private void startBehaviours() {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.isEnabled()) {
-                for (Behaviour behaviour : gameObject.value) {
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+
+            if (gameObject.isEnabled()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                for (var i = 0; i < behaviours.size; i++) {
+                    var behaviour = behaviours.get(i);
+
                     if (behaviour.started)
                         continue;
 
@@ -140,76 +147,98 @@ public class UnBox {
     }
 
     private void updateFixedObjects() {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.isEnabled()) {
-                for (Behaviour behaviour : gameObject.value) {
-                    behaviour.fixedUpdate();
-                }
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+
+            if (gameObject.isEnabled()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                for (var i = 0; i < behaviours.size; i++)
+                    behaviours.get(i).fixedUpdate();
             }
         }
     }
 
     private void updateGameObjects(float delta) {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.isEnabled()) {
-                for (Behaviour behaviour : gameObject.value) {
-                    behaviour.update(delta);
-                }
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+
+            if (gameObject.isEnabled()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                for (var i = 0; i < behaviours.size; i++)
+                    behaviours.get(i).update(delta);
             }
         }
     }
 
     private void lateUpdateGameObjects(float delta) {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.isEnabled()) {
-                for (Behaviour behaviour : gameObject.value) {
-                    behaviour.lateUpdate(delta);
-                }
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+
+            if (gameObject.isEnabled()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                for (var i = 0; i < behaviours.size; i++)
+                    behaviours.get(i).lateUpdate(delta);
             }
         }
     }
 
     private void renderGameObjects(Batch batch) {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.isEnabled()) {
-                for (Behaviour behaviour : gameObject.value) {
-                    behaviour.render(batch);
-                }
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+
+            if (gameObject.isEnabled()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                for (var i = 0; i < behaviours.size; i++)
+                    behaviours.get(i).render(batch);
             }
         }
     }
 
     private void debugRenderGameObjects(ShapeRenderer renderer) {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.isEnabled()) {
-                for (Behaviour behaviour : gameObject.value) {
-                    behaviour.debugRender(renderer);
-                }
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+
+            if (gameObject.isEnabled()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                for (var i = 0; i < behaviours.size; i++)
+                    behaviours.get(i).debugRender(renderer);
             }
         }
     }
 
     private void debugRenderGameObjects(ShapeDrawer drawer) {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.isEnabled()) {
-                for (Behaviour behaviour : gameObject.value) {
-                    behaviour.debugRender(drawer);
-                }
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+
+            if (gameObject.isEnabled()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                for (var i = 0; i < behaviours.size; i++)
+                    behaviours.get(i).debugRender(drawer);
             }
         }
     }
 
     private void instantiateGameObjects() {
-        for (var gameObject : gameObjectsToAdd) {
-            gameObjects.put(gameObject.key, new Array<Behaviour>());
-            gameObject.key.setBody(world.createBody(gameObject.value));
+        for (int i = 0; i < gameObjectsToAdd.orderedKeys().size; i++) {
+            var gameObject = gameObjectsToAdd.orderedKeys().get(i);
+
+            gameObjects.put(gameObject, new Array<Behaviour>());
+            gameObject.setBody(world.createBody(gameObjectsToAdd.get(gameObject)));
         }
 
         gameObjectsToAdd.clear();
     }
 
     private void instantiateBehaviours() {
-        for (var behaviour : behavioursToAdd) {
+        for (int i = 0; i < behavioursToAdd.size; i++) {
+            var behaviour = behavioursToAdd.get(i);
+
             gameObjects.get(behaviour.getGameObject()).add(behaviour);
 
             behaviour.awake();
@@ -221,7 +250,9 @@ public class UnBox {
     }
 
     private void destroyBehaviours() {
-        for (var behaviour : behavioursToDestroy) {
+        for (int i = 0; i < behavioursToDestroy.size; i++) {
+            var behaviour = behavioursToDestroy.get(i);
+
             if (gameObjects.containsKey(behaviour.getGameObject()))
                 gameObjects.get(behaviour.getGameObject()).removeValue(behaviour, true);
 
@@ -281,9 +312,11 @@ public class UnBox {
      * @return The GameObject if found, or null.
      */
     public GameObject findGameObject(Body body) {
-        for (var gameObject : gameObjects) {
-            if (gameObject.key.getBody().equals(body))
-                return gameObject.key;
+        for (int i = 0; i < gameObjects.orderedKeys().size; i++) {
+            var gameObject = gameObjects.orderedKeys().get(i);
+
+            if (gameObject.getBody().equals(body))
+                return gameObject;
         }
 
         return null;
@@ -307,10 +340,17 @@ public class UnBox {
     public <T extends Behaviour> Array<T> findBehaviours(Class<T> behaviourClass, Array<T> tempStorage) {
         tempStorage.clear();
 
-        for (var gameObject : gameObjects)
-            for (var behaviour : gameObject.value)
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+            var behaviours = gameObjects.get(gameObject);
+
+            for (int i = 0; i < behaviours.size; i++) {
+                var behaviour = behaviours.get(i);
+
                 if (behaviour.getClass().equals(behaviourClass))
                     tempStorage.add((T) behaviour);
+            }
+        }
 
         return tempStorage;
     }

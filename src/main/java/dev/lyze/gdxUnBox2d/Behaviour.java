@@ -49,9 +49,24 @@ public abstract class Behaviour {
      */
     public abstract void lateUpdate(float delta);
 
-    public abstract boolean onCollisionPreSolve(GameObject b, Contact contact, Manifold oldManifold);
+    /**
+     *
+     * @param other The other object this object collides with.
+     * @param contact Infos about the collision.
+     * @param oldManifold
+     * @return True to cancel running the event
+     */
 
-    public abstract boolean onCollisionPostSolve(GameObject b, Contact contact, ContactImpulse impulse);
+    public abstract boolean onCollisionPreSolve(GameObject other, Contact contact, Manifold oldManifold);
+
+    /**
+     *
+     * @param other The other object this object collides with.
+     * @param contact Infos about the collision.
+     * @param impulse
+     * @return True to cancel running the event
+     */
+    public abstract boolean onCollisionPostSolve(GameObject other, Contact contact, ContactImpulse impulse);
 
     /**
      * This method gets called when a Box2D collision happens with this object.

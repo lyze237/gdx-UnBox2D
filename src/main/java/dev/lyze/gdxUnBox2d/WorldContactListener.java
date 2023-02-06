@@ -30,11 +30,13 @@ public class WorldContactListener implements ContactListener {
         var a = unBox.findGameObject(contact.getFixtureA().getBody());
         var b = unBox.findGameObject(contact.getFixtureB().getBody());
 
-        for (var behaviour : unBox.gameObjects.get(a))
-            behaviour.onCollisionEnter(b, contact);
+        var aBehaviours = unBox.gameObjects.get(a);
+        for (int i = 0; i < aBehaviours.size; i++)
+            aBehaviours.get(i).onCollisionEnter(b, contact);
 
-        for (var behaviour : unBox.gameObjects.get(b))
-            behaviour.onCollisionEnter(a, contact);
+        var bBehaviours = unBox.gameObjects.get(b);
+        for (int i = 0; i < bBehaviours.size; i++)
+            bBehaviours.get(i).onCollisionEnter(a, contact);
 
         collidingEntities.add(collidingEntitiesPool.obtain().set(a, b));
     }
@@ -44,11 +46,13 @@ public class WorldContactListener implements ContactListener {
         var a = unBox.findGameObject(contact.getFixtureA().getBody());
         var b = unBox.findGameObject(contact.getFixtureB().getBody());
 
-        for (var behaviour : unBox.gameObjects.get(a))
-            behaviour.onCollisionExit(b, contact);
+        var aBehaviours = unBox.gameObjects.get(a);
+        for (int i = 0; i < aBehaviours.size; i++)
+            aBehaviours.get(i).onCollisionExit(b, contact);
 
-        for (var behaviour : unBox.gameObjects.get(b))
-            behaviour.onCollisionExit(a, contact);
+        var bBehaviours = unBox.gameObjects.get(b);
+        for (int i = 0; i < bBehaviours.size; i++)
+            bBehaviours.get(i).onCollisionExit(a, contact);
 
         for (int i = collidingEntities.size - 1; i >= 0; i--) {
             if (collidingEntities.get(i).is(a, b)) {
@@ -59,12 +63,16 @@ public class WorldContactListener implements ContactListener {
     }
 
     public void update() {
-        for (var collidingEntity : collidingEntities) {
-            for (var behaviour : unBox.gameObjects.get(collidingEntity.getA()))
-                behaviour.onCollisionStay(collidingEntity.getB());
+        for (int i = 0; i < collidingEntities.size; i++) {
+            var collidingEntity = collidingEntities.get(i);
 
-            for (var behaviour : unBox.gameObjects.get(collidingEntity.getB()))
-                behaviour.onCollisionStay(collidingEntity.getA());
+            var aBehaviours = unBox.gameObjects.get(collidingEntity.getA());
+            for (int j = 0; j < aBehaviours.size; j++)
+                aBehaviours.get(j).onCollisionStay(collidingEntity.getB());
+
+            var bBehaviours = unBox.gameObjects.get(collidingEntity.getB());
+            for (int j = 0; j < bBehaviours.size; j++)
+                bBehaviours.get(j).onCollisionStay(collidingEntity.getA());
         }
     }
 
@@ -73,12 +81,15 @@ public class WorldContactListener implements ContactListener {
         var a = unBox.findGameObject(contact.getFixtureA().getBody());
         var b = unBox.findGameObject(contact.getFixtureB().getBody());
 
-        for (var behaviour : unBox.gameObjects.get(a))
-            if (behaviour.onCollisionPreSolve(b, contact, oldManifold))
+
+        var aBehaviours = unBox.gameObjects.get(a);
+        for (int i = 0; i < aBehaviours.size; i++)
+            if (aBehaviours.get(i).onCollisionPreSolve(b, contact, oldManifold))
                 break;
 
-        for (var behaviour : unBox.gameObjects.get(b))
-            if (behaviour.onCollisionPreSolve(a, contact, oldManifold))
+        var bBehaviours = unBox.gameObjects.get(b);
+        for (int i = 0; i < bBehaviours.size; i++)
+            if (bBehaviours.get(i).onCollisionPreSolve(a, contact, oldManifold))
                 break;
     }
 
@@ -87,12 +98,14 @@ public class WorldContactListener implements ContactListener {
         var a = unBox.findGameObject(contact.getFixtureA().getBody());
         var b = unBox.findGameObject(contact.getFixtureB().getBody());
 
-        for (var behaviour : unBox.gameObjects.get(a))
-            if (behaviour.onCollisionPostSolve(b, contact, impulse))
+        var aBehaviours = unBox.gameObjects.get(a);
+        for (int i = 0; i < aBehaviours.size; i++)
+            if (aBehaviours.get(i).onCollisionPostSolve(b, contact, impulse))
                 break;
 
-        for (var behaviour : unBox.gameObjects.get(b))
-            if (behaviour.onCollisionPostSolve(a, contact, impulse))
+        var bBehaviours = unBox.gameObjects.get(b);
+        for (int i = 0; i < bBehaviours.size; i++)
+            if (bBehaviours.get(i).onCollisionPostSolve(a, contact, impulse))
                 break;
     }
 
