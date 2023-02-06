@@ -274,7 +274,7 @@ public class UnBox {
 
             var behaviours = gameObjects.get(gameObject);
             for (int j = 0; j < behaviours.size; j++)
-                behavioursToDestroy.add(behaviours.get(i));
+                behavioursToDestroy.add(behaviours.get(j));
 
             gameObjects.remove(gameObject);
         }
