@@ -16,7 +16,7 @@ public enum BehaviourState {
     /**
      * {@link Behaviour#start()} has been called, and therefore it's receiving updates and render calls provided the game object is {@link GameObject#isEnabled()}.
      */
-    STARTED,
+    ALIVE,
     /**
      * Either the game object or the behaviour is currently waiting to be destroyed at the end of the current frame.
      */

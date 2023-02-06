@@ -119,7 +119,7 @@ public class UnBox {
 
                     if (behaviour.getState() == BehaviourState.AWAKENED) {
                         behaviour.start();
-                        behaviour.setState(BehaviourState.STARTED);
+                        behaviour.setState(BehaviourState.ALIVE);
                     }
                 }
             }
