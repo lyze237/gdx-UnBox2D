@@ -4,14 +4,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import dev.lyze.gdxUnBox2d.GameObject;
-import lombok.var;
 
 /**
  * Creates a circle fixture in awake with the provided parameters.
  */
 public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
-    private final float radius;
-    private final Vector2 position;
+    private final CircleShape shape;
 
     /**
      * Creates a circle fixture in awake with the provided parameters.
@@ -42,16 +40,13 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
     public CreateCircleFixtureBehaviour(Vector2 position, float radius, FixtureDef fixtureDef, GameObject gameObject) {
         super(fixtureDef, gameObject);
 
-        this.position = position;
-        this.radius = radius;
+        shape = new CircleShape();
+        shape.setRadius(radius);
+        shape.setPosition(position);
     }
 
     @Override
     public void awake() {
-        var shape = new CircleShape();
-        shape.setRadius(radius);
-        shape.setPosition(position);
-
         createAndAttachFixture(shape);
     }
 }
