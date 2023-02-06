@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
 import lombok.Getter;
 import lombok.var;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 // https://docs.unity3d.com/Manual/ExecutionOrder.html
 
@@ -85,6 +86,14 @@ public class UnBox {
      */
     public void debugRender(ShapeRenderer renderer) {
         debugRenderGameObjects(renderer);
+    }
+
+    /**
+     * Renders behaviours with a shape drawer, therefore commonly used for debugging. Call this after {@link UnBox#preRender(float)}.
+     * @param drawer The shape drawer used to render the behaviours.
+     */
+    public void debugRender(ShapeDrawer drawer) {
+        debugRenderGameObjects(drawer);
     }
 
     /**
@@ -175,6 +184,16 @@ public class UnBox {
             if (gameObject.key.isEnabled()) {
                 for (Behaviour behaviour : gameObject.value) {
                     behaviour.debugRender(renderer);
+                }
+            }
+        }
+    }
+
+    private void debugRenderGameObjects(ShapeDrawer drawer) {
+        for (var gameObject : gameObjects) {
+            if (gameObject.key.isEnabled()) {
+                for (Behaviour behaviour : gameObject.value) {
+                    behaviour.debugRender(drawer);
                 }
             }
         }
