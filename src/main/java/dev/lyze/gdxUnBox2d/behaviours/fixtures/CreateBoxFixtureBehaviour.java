@@ -6,14 +6,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import dev.lyze.gdxUnBox2d.GameObject;
 import lombok.Getter;
-import lombok.var;
 
 /**
  * Creates a box fixture in awake with the provided parameters.
  */
 public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
-    private final float hx, hy;
-    private final Vector2 position;
+    private final PolygonShape shape;
 
     @Getter private Fixture fixture;
 
@@ -49,20 +47,12 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
     public CreateBoxFixtureBehaviour(float hx, float hy, Vector2 position, FixtureDef fixtureDef, GameObject gameObject) {
         super(fixtureDef, gameObject);
 
-        this.hx = hx;
-        this.hy = hy;
-        this.position = position;
+        shape = new PolygonShape();
+        shape.setAsBox(hx, hy, position, 0);
     }
 
     @Override
     public void awake() {
-        var shape = new PolygonShape();
-        shape.setAsBox(hx, hy, position, 0);
-
-        var fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-
-        fixture = getGameObject().getBody().createFixture(fixtureDef);
-        shape.dispose();
+        createAndAttachFixture(shape);
     }
 }
