@@ -11,10 +11,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
-import java.util.Comparator;
 import lombok.Getter;
 import lombok.var;
 import space.earlygrey.shapedrawer.ShapeDrawer;
+
+import java.util.Comparator;
 
 // https://docs.unity3d.com/Manual/ExecutionOrder.html
 
@@ -79,11 +80,25 @@ public class UnBox {
     public void preRender(float delta) {
         startBehaviours();
 
+        adjustExecutionOrder();
+
         fixedUpdate(delta);
         updateGameObjects(delta);
         lateUpdateGameObjects(delta);
 
         adjustRenderOrder();
+    }
+
+    public void adjustExecutionOrder() {
+        for (int i = 0; i < gameObjects.orderedKeys().size; i++) {
+            var gameObject = gameObjects.orderedKeys().get(i);
+
+            if (gameObject.isInvalidateExecutionOrder()) {
+                var behaviours = gameObjects.get(gameObject);
+
+                behaviours.sort(Comparator.comparingInt(Behaviour::getExecutionOrder));
+            }
+        }
     }
 
     private void adjustRenderOrder() {
@@ -282,6 +297,7 @@ public class UnBox {
                 behaviour.onEnable();
 
             invalidateRenderOrder = true;
+            behaviour.getGameObject().invalidateExecutionOrder();
         }
 
         behavioursToAdd.clear();
@@ -301,6 +317,7 @@ public class UnBox {
             behaviour.setState(BehaviourState.DESTROYED);
 
             invalidateRenderOrder = true;
+            behaviour.getGameObject().invalidateExecutionOrder();
         }
 
         behavioursToDestroy.clear();

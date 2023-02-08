@@ -14,7 +14,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 public abstract class Behaviour {
     @Getter private final GameObject gameObject;
 
-    private int renderOrder;
+    private int renderOrder, executionOrder;
 
     /**
      * Lifecycle state of the behaviour.
@@ -70,7 +70,7 @@ public abstract class Behaviour {
      *
      * @param other       The other object this object collides with.
      * @param contact     Infos about the collision.
-     * @param oldManifold
+     * @param oldManifold {@link Manifold}
      * @return True to cancel running the event
      */
 
@@ -80,7 +80,7 @@ public abstract class Behaviour {
      *
      * @param other   The other object this object collides with.
      * @param contact Infos about the collision.
-     * @param impulse
+     * @param impulse {@link ContactImpulse}
      * @return True to cancel running the event
      */
     public abstract boolean onCollisionPostSolve(GameObject other, Contact contact, ContactImpulse impulse);
@@ -190,5 +190,28 @@ public abstract class Behaviour {
      */
     public int getRenderOrder() {
         return renderOrder;
+    }
+
+    /**
+     * Sets how late this behaviour gets executed in the update methods per game
+     * object.
+     * 
+     * @param executionOrder The bigger the number the later the behaviour gets
+     *                       drawn.
+     */
+    public void setExecutionOrder(int executionOrder) {
+        this.executionOrder = executionOrder;
+
+        getGameObject().invalidateExecutionOrder();
+    }
+
+    /**
+     * Returns how late this behaviour gets executed in the update methods per game
+     * object.
+     * 
+     * @return The bigger the number the later the behaviour gets drawn.
+     */
+    public int getExecutionOrder() {
+        return executionOrder;
     }
 }

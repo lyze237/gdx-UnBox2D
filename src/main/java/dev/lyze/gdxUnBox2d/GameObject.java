@@ -34,9 +34,11 @@ public final class GameObject {
      */
     @Getter @Setter(AccessLevel.PACKAGE) private GameObjectState state = GameObjectState.NOT_IN_SYSTEM;
 
+    @Getter @Setter(AccessLevel.PACKAGE) private boolean invalidateExecutionOrder;
+
     /**
      * Creates a new enabled game object with a dynamic body.
-     * 
+     *
      * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
      *              should be created.
      * @param unBox The libraries instance.
@@ -47,7 +49,7 @@ public final class GameObject {
 
     /**
      * Creates a new enabled game object with a dynamic body.
-     * 
+     *
      * @param name  The name of the game object.
      * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
      *              should be created.
@@ -59,7 +61,7 @@ public final class GameObject {
 
     /**
      * Creates a new enabled game object with a dynamic body.
-     * 
+     *
      * @param enabled If the game object should be enabled or disabled, see
      *                {@link GameObject#setEnabled(boolean)},
      *                {@link Behaviour#onEnable()} and
@@ -113,7 +115,7 @@ public final class GameObject {
      * Calls {@link Behaviour#onEnable()} or {@link Behaviour#onDisable()} for each
      * behaviour on this game object.
      * Additionally, enables or disables the body in the physics world.
-     * 
+     *
      * @param enabled If the game object should be enabled or not.
      */
     public void setEnabled(boolean enabled) {
@@ -132,7 +134,7 @@ public final class GameObject {
     /**
      * Gets the first behaviour instance with the specified type of this game
      * object.
-     * 
+     *
      * @param behaviourClass The class type we want to search for.
      * @return The found behaviour or null.
      */
@@ -148,7 +150,7 @@ public final class GameObject {
     /**
      * Gets all behaviour instances with the specified type of this game object.
      * Allocations an array inside this method.
-     * 
+     *
      * @param behaviourClass The class type we want to search for.
      * @return The found behaviour or null.
      */
@@ -158,7 +160,7 @@ public final class GameObject {
 
     /**
      * Gets all behaviour instances with the specified type of this game object.
-     * 
+     *
      * @param behaviourClass The class type we want to search for.
      * @param tempStorage    A temporary array to store all behaviours in it.
      *                       Therefore, there's no array allocation happening in
@@ -186,10 +188,19 @@ public final class GameObject {
 
     /**
      * Marks the behaviour for deletion at the end of the current frame.
-     * 
+     *
      * @param behaviour The behaviour instance to remove.
      */
     public void destroy(Behaviour behaviour) {
         getUnBox().destroy(behaviour);
+    }
+
+    /**
+     * When a behaviours execution order gets updated unBox doesn't get notified
+     * about
+     * that, hence you need to call this method afterwards.
+     */
+    public void invalidateExecutionOrder() {
+        this.invalidateExecutionOrder = true;
     }
 }
