@@ -2,6 +2,8 @@ package dev.lyze.gdxUnBox2d.headless.tests;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
+import dev.lyze.gdxUnBox2d.BodyDefType;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
@@ -16,11 +18,35 @@ import java.util.Random;
 
 public class HeaderTest extends LibgdxHeadlessUnitTest {
     @Test
+    public void PerfTest() {
+        var unBox = new UnBox();
+
+        for (int i = 0; i < 100_000; i++) {
+            new GameObject(BodyDefType.NoBody, unBox);
+        }
+
+        var average = 0L;
+        for (int amount = 0; amount < 20; amount++) {
+            var time = System.nanoTime();
+
+            for (int i = 0; i < 100; i++) {
+                unBox.preRender(0.01f);
+                unBox.postRender();
+            }
+
+            var elapsed = System.nanoTime() - time;
+            System.out.println("Run " + amount + ": " + + elapsed);
+            average += elapsed;
+        }
+
+        System.out.println("Average: " + TimeUtils.nanosToMillis(average / 20));
+    }
+    @Test
     public void EnabledDisabledTest() {
         var unBox = new UnBox();
 
-        var enabledGo = new GameObject(unBox);
-        var disabledGo = new GameObject(false, unBox);
+        var enabledGo = new GameObject(BodyDefType.NoBody, unBox);
+        var disabledGo = new GameObject(false, BodyDefType.NoBody, unBox);
 
         new SoutBehaviour("Enabled GO", true, enabledGo);
         new SoutBehaviour("Disabled GO", true, disabledGo);
@@ -47,7 +73,7 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
 
         var behaviours = new Array<RenderOrderBehaviour>();
         for (var i = 0; i < 100; i++)
-            behaviours.add(new RenderOrderBehaviour(random.nextInt(), new GameObject("" + i, unBox)));
+            behaviours.add(new RenderOrderBehaviour(random.nextInt(), new GameObject("" + i, BodyDefType.NoBody, unBox)));
 
         unBox.postRender();
 
