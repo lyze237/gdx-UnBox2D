@@ -11,11 +11,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
+import java.util.Comparator;
 import lombok.Getter;
 import lombok.var;
 import space.earlygrey.shapedrawer.ShapeDrawer;
-
-import java.util.Comparator;
 
 // https://docs.unity3d.com/Manual/ExecutionOrder.html
 
@@ -26,7 +25,9 @@ import java.util.Comparator;
  * Additionally, calculates physics with Box2D.
  * </p>
  * <p>
- * Make sure to call {@link UnBox#preRender(float)}, {@link UnBox#render(Batch)}, {@link UnBox#postRender()} in your {@link ApplicationListener#render()} loop in this order.
+ * Make sure to call {@link UnBox#preRender(float)},
+ * {@link UnBox#render(Batch)}, {@link UnBox#postRender()} in your
+ * {@link ApplicationListener#render()} loop in this order.
  * </p>
  */
 public class UnBox {
@@ -47,14 +48,17 @@ public class UnBox {
     private final WorldContactListener contactListener;
 
     /**
-     * Instantiates an instance of this object with gravity set to (0, -10) and doSleep set to true.
+     * Instantiates an instance of this object with gravity set to (0, -10) and
+     * doSleep set to true.
      */
     public UnBox() {
         this(new Vector2(0, -10), true);
     }
 
     /**
-     * Instantiates an instance of this object with physics set to (0, -10) and body sleep set to true.
+     * Instantiates an instance of this object with physics set to (0, -10) and body
+     * sleep set to true.
+     * 
      * @param gravity The gravity of the Box2D world.
      * @param doSleep Ignore physics simulation for inactive Box2D bodies.
      */
@@ -64,9 +68,13 @@ public class UnBox {
     }
 
     /**
-     * Starts behaviours, calls {@link UnBox#fixedUpdate(float)}, {@link UnBox#updateGameObjects(float)} and {@link UnBox#lateUpdateGameObjects(float)}.o
+     * Starts behaviours, calls {@link UnBox#fixedUpdate(float)},
+     * {@link UnBox#updateGameObjects(float)} and
+     * {@link UnBox#lateUpdateGameObjects(float)}.o
      * Call this at the beginning of your render loop.
-     * @param delta The delta time compared to the previous time. {@link Graphics#getDeltaTime()}
+     * 
+     * @param delta The delta time compared to the previous time.
+     *              {@link Graphics#getDeltaTime()}
      */
     public void preRender(float delta) {
         startBehaviours();
@@ -102,6 +110,7 @@ public class UnBox {
 
     /**
      * Renders behaviours. Call this after {@link UnBox#preRender(float)}.
+     * 
      * @param batch The batch used to render the behaviours.
      */
     public void render(Batch batch) {
@@ -109,7 +118,9 @@ public class UnBox {
     }
 
     /**
-     * Renders behaviours with a shape renderer, therefore commonly used for debugging. Call this after {@link UnBox#preRender(float)}.
+     * Renders behaviours with a shape renderer, therefore commonly used for
+     * debugging. Call this after {@link UnBox#preRender(float)}.
+     * 
      * @param renderer The shape renderer used to render the behaviours.
      */
     public void debugRender(ShapeRenderer renderer) {
@@ -117,7 +128,9 @@ public class UnBox {
     }
 
     /**
-     * Renders behaviours with a shape drawer, therefore commonly used for debugging. Call this after {@link UnBox#preRender(float)}.
+     * Renders behaviours with a shape drawer, therefore commonly used for
+     * debugging. Call this after {@link UnBox#preRender(float)}.
+     * 
      * @param drawer The shape drawer used to render the behaviours.
      */
     public void debugRender(ShapeDrawer drawer) {
@@ -125,7 +138,8 @@ public class UnBox {
     }
 
     /**
-     * Instantiates and destroys pending game objects or behaviours. Call this after {@link UnBox#render(Batch)}.
+     * Instantiates and destroys pending game objects or behaviours. Call this after
+     * {@link UnBox#render(Batch)}.
      */
     public void postRender() {
         instantiateGameObjects();
@@ -328,6 +342,7 @@ public class UnBox {
 
     /**
      * Marks the behaviour for deletion at the end of the current frame.
+     * 
      * @param behaviour The behaviour instance to remove.
      */
     public void destroy(Behaviour behaviour) {
@@ -337,7 +352,8 @@ public class UnBox {
     }
 
     /**
-     * Marks the game object and all its behaviour for deletion at the end of the current frame.
+     * Marks the game object and all its behaviour for deletion at the end of the
+     * current frame.
      *
      * @param go The behaviour instance to remove.
      */
@@ -354,6 +370,7 @@ public class UnBox {
 
     /**
      * Helper method to find the game object based on a Box2D Body.
+     * 
      * @param body The Box2D body to search for.
      * @return The GameObject if found, or null.
      */
@@ -369,7 +386,9 @@ public class UnBox {
     }
 
     /**
-     * Finds all behaviour instances with the specified type. Allocations an array inside this method.
+     * Finds all behaviour instances with the specified type. Allocations an array
+     * inside this method.
+     * 
      * @param behaviourClass The class type we want to search for.
      * @return The found behaviour or null.
      */
@@ -379,8 +398,11 @@ public class UnBox {
 
     /**
      * Finds all behaviour instances with the specified type.
+     * 
      * @param behaviourClass The class type we want to search for.
-     * @param tempStorage A temporary array to store all behaviours in it. Therefore, there's no array allocation happening in this method.
+     * @param tempStorage    A temporary array to store all behaviours in it.
+     *                       Therefore, there's no array allocation happening in
+     *                       this method.
      * @return All found behaviours or empty array.
      */
     public <T extends Behaviour> Array<T> findBehaviours(Class<T> behaviourClass, Array<T> tempStorage) {
@@ -402,7 +424,8 @@ public class UnBox {
     }
 
     /**
-     * When a behaviours render order gets updated unBox doesn't get notified about that, hence you need to call this method afterwards.
+     * When a behaviours render order gets updated unBox doesn't get notified about
+     * that, hence you need to call this method afterwards.
      */
     public void invalidateRenderOrder() {
         invalidateRenderOrder = true;

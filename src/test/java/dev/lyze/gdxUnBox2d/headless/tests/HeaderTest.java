@@ -9,12 +9,11 @@ import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.headless.LibgdxHeadlessUnitTest;
+import java.util.Random;
 import lombok.Setter;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 public class HeaderTest extends LibgdxHeadlessUnitTest {
     @Test
@@ -35,12 +34,13 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
             }
 
             var elapsed = System.nanoTime() - time;
-            System.out.println("Run " + amount + ": " + + elapsed);
+            System.out.println("Run " + amount + ": " + +elapsed);
             average += elapsed;
         }
 
         System.out.println("Average: " + TimeUtils.nanosToMillis(average / 20));
     }
+
     @Test
     public void EnabledDisabledTest() {
         var unBox = new UnBox();
@@ -73,7 +73,8 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
 
         var behaviours = new Array<RenderOrderBehaviour>();
         for (var i = 0; i < 100; i++)
-            behaviours.add(new RenderOrderBehaviour(random.nextInt(), new GameObject("" + i, BodyDefType.NoBody, unBox)));
+            behaviours
+                    .add(new RenderOrderBehaviour(random.nextInt(), new GameObject("" + i, BodyDefType.NoBody, unBox)));
 
         unBox.postRender();
 
