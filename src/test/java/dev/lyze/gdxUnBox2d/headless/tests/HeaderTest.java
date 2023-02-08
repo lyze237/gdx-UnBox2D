@@ -10,7 +10,6 @@ import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.headless.LibgdxHeadlessUnitTest;
 import java.util.Random;
-import lombok.Setter;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -84,25 +83,17 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
         for (var behaviour : behaviours)
             behaviour.setRenderOrder(random.nextInt());
 
-        Assertions.assertThrows(AssertionError.class, () -> {
-            unBox.preRender(1);
-            unBox.render(null);
-        });
-
-        unBox.invalidateRenderOrder();
-
         unBox.preRender(1);
         unBox.render(null);
     }
 
     private static class RenderOrderBehaviour extends BehaviourAdapter {
         private static int previouslyRendered = Integer.MIN_VALUE;
-        @Setter private int renderOrder;
 
         public RenderOrderBehaviour(int renderOrder, GameObject gameObject) {
             super(gameObject);
 
-            this.renderOrder = renderOrder;
+            setRenderOrder(renderOrder);
         }
 
         @Override
@@ -115,11 +106,6 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
             Assertions.assertTrue(previouslyRendered <= getRenderOrder());
 
             previouslyRendered = getRenderOrder();
-        }
-
-        @Override
-        public int getRenderOrder() {
-            return renderOrder;
         }
     }
 }
