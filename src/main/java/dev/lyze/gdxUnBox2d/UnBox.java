@@ -243,7 +243,9 @@ public class UnBox {
             var gameObject = gameObjectsToAdd.orderedKeys().get(i);
 
             gameObjects.put(gameObject, new Array<>());
-            gameObject.setBody(world.createBody(gameObjectsToAdd.get(gameObject)));
+            var bodyDef = gameObjectsToAdd.get(gameObject);
+            if (bodyDef != null)
+                gameObject.setBody(world.createBody(bodyDef));
 
             gameObject.setState(GameObjectState.ALIVE);
 
@@ -294,8 +296,10 @@ public class UnBox {
         for (int i = 0; i < gameObjectsToDestroy.size; i++) {
             var gameObject = gameObjectsToDestroy.get(i);
 
-            contactListener.destroy(gameObject);
-            world.destroyBody(gameObject.getBody());
+            if (gameObject.getBody() != null) {
+                contactListener.destroy(gameObject);
+                world.destroyBody(gameObject.getBody());
+            }
 
             var behaviours = gameObjects.get(gameObject);
             for (int j = 0; j < behaviours.size; j++)

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import dev.lyze.gdxUnBox2d.BodyDefType;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
@@ -34,8 +35,8 @@ public class MoveTest extends LibgdxLwjglUnitTest {
     public void MovementTest() {
         unBox = new UnBox(new Vector2(0, 0), true);
 
-        var rightGo = new GameObject(unBox);
-        var leftGo = new GameObject(unBox);
+        var rightGo = new GameObject(BodyDefType.DynamicBody, unBox);
+        var leftGo = new GameObject(BodyDefType.DynamicBody, unBox);
 
         new SoutBehaviour("Right GO", false, rightGo);
         new SoutBehaviour("Left GO", false, leftGo);

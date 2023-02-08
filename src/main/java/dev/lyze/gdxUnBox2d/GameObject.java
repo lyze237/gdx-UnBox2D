@@ -36,55 +36,59 @@ public final class GameObject {
 
     /**
      * Creates a new enabled game object with a dynamic body.
+     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(UnBox unBox) {
-        this("Game Object", unBox);
+    public GameObject(BodyDefType type, UnBox unBox) {
+        this("Game Object", type, unBox);
     }
 
     /**
      * Creates a new enabled game object with a dynamic body.
      * @param name The name of the game object.
+     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(String name, UnBox unBox) {
-        this(name, true, unBox);
+    public GameObject(String name, BodyDefType type, UnBox unBox) {
+        this(name, true, type, unBox);
     }
 
     /**
      * Creates a new enabled game object with a dynamic body.
      * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
+     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(boolean enabled, UnBox unBox) {
-        this("Game Object", enabled, unBox);
+    public GameObject(boolean enabled, BodyDefType type, UnBox unBox) {
+        this("Game Object", enabled, type, unBox);
     }
 
     /**
      * Creates a new game object with a dynamic body.
      * @param name The name of the game object.
      * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
+     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(String name, boolean enabled, UnBox unBox) {
-        this(name, enabled, null, unBox);
-    }
-
-    /**
-     * Creates a new game object.
-     * @param name The name of the game object.
-     * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
-     * @param bodyDef The initial body definition in case you want it to be directly static or something else.
-     * @param unBox The libraries instance.
-     */
-    public GameObject(String name, boolean enabled, BodyDef bodyDef, UnBox unBox) {
+    public GameObject(String name, boolean enabled, BodyDefType type, UnBox unBox) {
         this.unBox = unBox;
         this.enabled = enabled;
         this.name = name;
 
-        if (bodyDef == null) {
+        BodyDef bodyDef = null;
+        if (type != BodyDefType.NoBody)
             bodyDef = new BodyDef();
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
+
+        switch (type) {
+            case StaticBody:
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                break;
+            case KinematicBody:
+                bodyDef.type = BodyDef.BodyType.KinematicBody;
+                break;
+            case DynamicBody:
+                bodyDef.type = BodyDef.BodyType.DynamicBody;
+                break;
         }
 
         unBox.addGameObject(this, bodyDef);
