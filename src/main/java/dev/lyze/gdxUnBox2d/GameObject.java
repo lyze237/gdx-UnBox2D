@@ -36,7 +36,9 @@ public final class GameObject {
 
     /**
      * Creates a new enabled game object with a dynamic body.
-     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
+     * 
+     * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *              should be created.
      * @param unBox The libraries instance.
      */
     public GameObject(BodyDefType type, UnBox unBox) {
@@ -45,8 +47,10 @@ public final class GameObject {
 
     /**
      * Creates a new enabled game object with a dynamic body.
-     * @param name The name of the game object.
-     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
+     * 
+     * @param name  The name of the game object.
+     * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *              should be created.
      * @param unBox The libraries instance.
      */
     public GameObject(String name, BodyDefType type, UnBox unBox) {
@@ -55,9 +59,14 @@ public final class GameObject {
 
     /**
      * Creates a new enabled game object with a dynamic body.
-     * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
-     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
-     * @param unBox The libraries instance.
+     * 
+     * @param enabled If the game object should be enabled or disabled, see
+     *                {@link GameObject#setEnabled(boolean)},
+     *                {@link Behaviour#onEnable()} and
+     *                {@link Behaviour#onDisable()}.
+     * @param type    The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *                should be created.
+     * @param unBox   The libraries instance.
      */
     public GameObject(boolean enabled, BodyDefType type, UnBox unBox) {
         this("Game Object", enabled, type, unBox);
@@ -65,10 +74,15 @@ public final class GameObject {
 
     /**
      * Creates a new game object with a dynamic body.
-     * @param name The name of the game object.
-     * @param enabled If the game object should be enabled or disabled, see {@link GameObject#setEnabled(boolean)}, {@link Behaviour#onEnable()} and {@link Behaviour#onDisable()}.
-     * @param type The Box2D body type, or {@link BodyDefType#NoBody} if no body should be created.
-     * @param unBox The libraries instance.
+     * 
+     * @param name    The name of the game object.
+     * @param enabled If the game object should be enabled or disabled, see
+     *                {@link GameObject#setEnabled(boolean)},
+     *                {@link Behaviour#onEnable()} and
+     *                {@link Behaviour#onDisable()}.
+     * @param type    The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *                should be created.
+     * @param unBox   The libraries instance.
      */
     public GameObject(String name, boolean enabled, BodyDefType type, UnBox unBox) {
         this.unBox = unBox;
@@ -96,8 +110,10 @@ public final class GameObject {
 
     /**
      * Enables or disables this game object.
-     * Calls {@link Behaviour#onEnable()} or {@link Behaviour#onDisable()} for each behaviour on this game object.
+     * Calls {@link Behaviour#onEnable()} or {@link Behaviour#onDisable()} for each
+     * behaviour on this game object.
      * Additionally, enables or disables the body in the physics world.
+     * 
      * @param enabled If the game object should be enabled or not.
      */
     public void setEnabled(boolean enabled) {
@@ -114,7 +130,9 @@ public final class GameObject {
     }
 
     /**
-     * Gets the first behaviour instance with the specified type of this game object.
+     * Gets the first behaviour instance with the specified type of this game
+     * object.
+     * 
      * @param behaviourClass The class type we want to search for.
      * @return The found behaviour or null.
      */
@@ -128,7 +146,9 @@ public final class GameObject {
     }
 
     /**
-     * Gets all behaviour instances with the specified type of this game object. Allocations an array inside this method.
+     * Gets all behaviour instances with the specified type of this game object.
+     * Allocations an array inside this method.
+     * 
      * @param behaviourClass The class type we want to search for.
      * @return The found behaviour or null.
      */
@@ -138,8 +158,11 @@ public final class GameObject {
 
     /**
      * Gets all behaviour instances with the specified type of this game object.
+     * 
      * @param behaviourClass The class type we want to search for.
-     * @param tempStorage A temporary array to store all behaviours in it. Therefore, there's no array allocation happening in this method.
+     * @param tempStorage    A temporary array to store all behaviours in it.
+     *                       Therefore, there's no array allocation happening in
+     *                       this method.
      * @return All found behaviours or empty array.
      */
     public <T extends Behaviour> Array<T> getBehaviours(Class<T> behaviourClass, Array<T> tempStorage) {
@@ -154,7 +177,8 @@ public final class GameObject {
     }
 
     /**
-     * Marks the game object and all its behaviour for deletion at the end of the current frame.
+     * Marks the game object and all its behaviour for deletion at the end of the
+     * current frame.
      */
     public void destroy() {
         getUnBox().destroy(this);
@@ -162,6 +186,7 @@ public final class GameObject {
 
     /**
      * Marks the behaviour for deletion at the end of the current frame.
+     * 
      * @param behaviour The behaviour instance to remove.
      */
     public void destroy(Behaviour behaviour) {

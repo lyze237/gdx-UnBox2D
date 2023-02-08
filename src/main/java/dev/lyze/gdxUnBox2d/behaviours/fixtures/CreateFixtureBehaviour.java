@@ -17,6 +17,7 @@ public abstract class CreateFixtureBehaviour extends BehaviourAdapter {
 
     /**
      * Creates a fixture in awake.
+     * 
      * @param gameObject The game object to attach to.
      */
     public CreateFixtureBehaviour(GameObject gameObject) {
@@ -25,6 +26,7 @@ public abstract class CreateFixtureBehaviour extends BehaviourAdapter {
 
     /**
      * Creates a fixture in awake.
+     * 
      * @param fixtureDef The fixture definition to use as template.
      * @param gameObject The game object to attach to.
      */

@@ -81,7 +81,6 @@ public class WorldContactListener implements ContactListener {
         var a = unBox.findGameObject(contact.getFixtureA().getBody());
         var b = unBox.findGameObject(contact.getFixtureB().getBody());
 
-
         var aBehaviours = unBox.gameObjects.get(a);
         for (int i = 0; i < aBehaviours.size; i++)
             if (aBehaviours.get(i).onCollisionPreSolve(b, contact, oldManifold))

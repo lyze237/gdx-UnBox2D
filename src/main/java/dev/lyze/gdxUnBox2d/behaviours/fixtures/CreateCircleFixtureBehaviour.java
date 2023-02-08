@@ -13,7 +13,8 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
 
     /**
      * Creates a circle fixture in awake with the provided parameters.
-     * @param radius The radius of the circle.
+     * 
+     * @param radius     The radius of the circle.
      * @param gameObject The game object to attach to.
      */
     public CreateCircleFixtureBehaviour(float radius, GameObject gameObject) {
@@ -22,8 +23,9 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
 
     /**
      * Creates a circle fixture in awake with the provided parameters.
-     * @param position The position of the circles center.
-     * @param radius The radius of the circle.
+     * 
+     * @param position   The position of the circles center.
+     * @param radius     The radius of the circle.
      * @param gameObject The game object to attach to.
      */
     public CreateCircleFixtureBehaviour(Vector2 position, float radius, GameObject gameObject) {
@@ -32,8 +34,9 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
 
     /**
      * Creates a circle fixture in awake with the provided parameters.
-     * @param position The position of the circles center.
-     * @param radius The radius of the circle.
+     * 
+     * @param position   The position of the circles center.
+     * @param radius     The radius of the circle.
      * @param fixtureDef The fixture definition to use as template.
      * @param gameObject The game object to attach to.
      */

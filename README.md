@@ -13,7 +13,7 @@ A libGDX library to couple Unity's behaviour system and execution order with Box
 * This library tries to re-implement the [execution order loop](https://docs.unity3d.com/Manual/ExecutionOrder.html) and this whole Game Object and Behaviour system (start, update, ...)
 * Everything is also coupled with Box2D:
   * Physics steps run at the correct time (fixedUpdate, ...)
-  * All your Behaviours receive proper physics notifications (onCollisionEnter, ...) 
+  * All your Behaviours receive proper physics notifications (onCollisionEnter, ...)
 
 ## Installation and Tutorial
 
@@ -24,7 +24,7 @@ Check the [wiki](https://github.com/lyze237/gdx-UnBox2D/wiki) for infos!
 ```java
 public class CoolGame extends Game {
     private Viewport viewport;
-    
+
     private SpriteBatch batch;
 
     private UnBox unBox;
@@ -34,20 +34,20 @@ public class CoolGame extends Game {
     public void create() {
         viewport = new FitViewport(30, 10);
         viewport.getCamera().translate(-5, 0, 0);
-        
+
         batch = new SpriteBatch();
         debugRenderer = new Box2DDebugRenderer();
 
         // Create an instance of the library, with no gravity
         unBox = new UnBox(new Vector2(0, 0), true);
-        
+
         // Create two game objects, those get automatically added to the libraries instance
         var rightGo = new GameObject(unBox);
         var leftGo = new GameObject(unBox);
-        
+
         // Attach a logging behaviour to both of the game objects
-        new SoutBehaviour("Right GO", false, rightGo);
-        new SoutBehaviour("Left GO", false, leftGo);
+        new SoutBehaviour(BodyDefType.DynamicBody, "Right GO", false, rightGo);
+        new SoutBehaviour(BodyDefType.DynamicBody, "Left GO", false, leftGo);
 
         // Attach a movement behaviour to both game objects
         new MoveBehaviour(true, rightGo);
@@ -64,12 +64,12 @@ public class CoolGame extends Game {
 
         viewport.apply();
         batch.setProjectionMatrix(viewport.getCamera().combined);
-        
+
         // Render the state
         batch.begin();
         unbox.render(batch);
         batch.end();
-        
+
         // Debug render all box2d bodies
         debugRenderer.render(unBox.getWorld(), viewport.getCamera().combined);
 
@@ -83,5 +83,3 @@ public class CoolGame extends Game {
     }
 }
 ```
-
-
