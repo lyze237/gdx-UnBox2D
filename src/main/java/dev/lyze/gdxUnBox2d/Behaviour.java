@@ -144,4 +144,12 @@ public abstract class Behaviour {
     public UnBox getUnBox() {
         return getGameObject().getUnBox();
     }
+
+    /**
+     * Returns how late this behaviour gets drawn.
+     * @return The bigger the number the later the behaviour gets drawn.
+     */
+    public int getRenderOrder() {
+        return 0;
+    }
 }

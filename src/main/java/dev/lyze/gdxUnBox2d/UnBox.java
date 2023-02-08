@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.var;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
+import java.util.Comparator;
+
 // https://docs.unity3d.com/Manual/ExecutionOrder.html
 
 /**
@@ -33,6 +35,8 @@ public class UnBox {
     @Getter private final World world;
 
     final OrderedMap<GameObject, Array<Behaviour>> gameObjects = new OrderedMap<>();
+    final Array<Behaviour> behavioursToRender = new Array<>();
+    private boolean invalidateRenderOrder;
 
     private final OrderedMap<GameObject, BodyDef> gameObjectsToAdd = new OrderedMap<>();
     private final Array<GameObject> gameObjectsToDestroy = new Array<>();
@@ -70,6 +74,30 @@ public class UnBox {
         fixedUpdate(delta);
         updateGameObjects(delta);
         lateUpdateGameObjects(delta);
+
+        adjustRenderOrder();
+    }
+
+    private void adjustRenderOrder() {
+        if (!invalidateRenderOrder)
+            return;
+
+        invalidateRenderOrder = false;
+
+        behavioursToRender.clear();
+
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+            var behaviours = gameObjects.get(gameObject);
+
+            for (var i = 0; i < behaviours.size; i++) {
+                var behaviour = behaviours.get(i);
+
+                behavioursToRender.add(behaviour);
+            }
+        }
+
+        behavioursToRender.sort(Comparator.comparingInt(Behaviour::getRenderOrder));
     }
 
     /**
@@ -184,41 +212,29 @@ public class UnBox {
     }
 
     private void renderGameObjects(Batch batch) {
-        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
-            var gameObject = gameObjects.orderedKeys().get(key);
+        for (int i = 0; i < behavioursToRender.size; i++) {
+            var behaviour = behavioursToRender.get(i);
 
-            if (gameObject.isEnabled()) {
-                var behaviours = gameObjects.get(gameObject);
-
-                for (var i = 0; i < behaviours.size; i++)
-                    behaviours.get(i).render(batch);
-            }
+            if (behaviour.getGameObject().isEnabled())
+                behaviour.render(batch);
         }
     }
 
     private void debugRenderGameObjects(ShapeRenderer renderer) {
-        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
-            var gameObject = gameObjects.orderedKeys().get(key);
+        for (int i = 0; i < behavioursToRender.size; i++) {
+            var behaviour = behavioursToRender.get(i);
 
-            if (gameObject.isEnabled()) {
-                var behaviours = gameObjects.get(gameObject);
-
-                for (var i = 0; i < behaviours.size; i++)
-                    behaviours.get(i).debugRender(renderer);
-            }
+            if (behaviour.getGameObject().isEnabled())
+                behaviour.debugRender(renderer);
         }
     }
 
     private void debugRenderGameObjects(ShapeDrawer drawer) {
-        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
-            var gameObject = gameObjects.orderedKeys().get(key);
+        for (int i = 0; i < behavioursToRender.size; i++) {
+            var behaviour = behavioursToRender.get(i);
 
-            if (gameObject.isEnabled()) {
-                var behaviours = gameObjects.get(gameObject);
-
-                for (var i = 0; i < behaviours.size; i++)
-                    behaviours.get(i).debugRender(drawer);
-            }
+            if (behaviour.getGameObject().isEnabled())
+                behaviour.debugRender(drawer);
         }
     }
 
@@ -226,10 +242,12 @@ public class UnBox {
         for (int i = 0; i < gameObjectsToAdd.orderedKeys().size; i++) {
             var gameObject = gameObjectsToAdd.orderedKeys().get(i);
 
-            gameObjects.put(gameObject, new Array<Behaviour>());
+            gameObjects.put(gameObject, new Array<>());
             gameObject.setBody(world.createBody(gameObjectsToAdd.get(gameObject)));
 
             gameObject.setState(GameObjectState.ALIVE);
+
+            invalidateRenderOrder = true;
         }
 
         gameObjectsToAdd.clear();
@@ -244,9 +262,10 @@ public class UnBox {
             behaviour.awake();
             behaviour.setState(BehaviourState.AWAKENED);
 
-
             if (behaviour.getGameObject().isEnabled())
                 behaviour.onEnable();
+
+            invalidateRenderOrder = true;
         }
 
         behavioursToAdd.clear();
@@ -264,6 +283,8 @@ public class UnBox {
 
             behaviour.onDestroy();
             behaviour.setState(BehaviourState.DESTROYED);
+
+            invalidateRenderOrder = true;
         }
 
         behavioursToDestroy.clear();
@@ -282,6 +303,8 @@ public class UnBox {
 
             gameObjects.remove(gameObject);
             gameObject.setState(GameObjectState.DESTROYED);
+
+            invalidateRenderOrder = true;
         }
 
         gameObjectsToDestroy.clear();
@@ -372,5 +395,12 @@ public class UnBox {
         }
 
         return tempStorage;
+    }
+
+    /**
+     * When a behaviours render order gets updated unBox doesn't get notified about that, hence you need to call this method afterwards.
+     */
+    public void invalidateRenderOrder() {
+        invalidateRenderOrder = true;
     }
 }
