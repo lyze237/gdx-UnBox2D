@@ -14,7 +14,7 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 public abstract class Behaviour {
     @Getter private final GameObject gameObject;
 
-    private int renderOrder, executionOrder;
+    private float renderOrder, executionOrder;
 
     /**
      * Lifecycle state of the behaviour.
@@ -177,7 +177,7 @@ public abstract class Behaviour {
      *
      * @param renderOrder The bigger the number the later the behaviour gets drawn.
      */
-    public void setRenderOrder(int renderOrder) {
+    public void setRenderOrder(float renderOrder) {
         this.renderOrder = renderOrder;
 
         getUnBox().invalidateRenderOrder();
@@ -188,7 +188,7 @@ public abstract class Behaviour {
      *
      * @return The bigger the number the later the behaviour gets drawn.
      */
-    public int getRenderOrder() {
+    public float getRenderOrder() {
         return renderOrder;
     }
 
@@ -199,7 +199,7 @@ public abstract class Behaviour {
      * @param executionOrder The bigger the number the later the behaviour gets
      *                       drawn.
      */
-    public void setExecutionOrder(int executionOrder) {
+    public void setExecutionOrder(float executionOrder) {
         this.executionOrder = executionOrder;
 
         getGameObject().invalidateExecutionOrder();
@@ -211,7 +211,7 @@ public abstract class Behaviour {
      * 
      * @return The bigger the number the later the behaviour gets drawn.
      */
-    public int getExecutionOrder() {
+    public float getExecutionOrder() {
         return executionOrder;
     }
 }
