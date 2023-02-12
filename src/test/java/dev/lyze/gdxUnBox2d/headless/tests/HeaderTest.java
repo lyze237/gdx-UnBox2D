@@ -33,7 +33,7 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
             }
 
             var elapsed = System.nanoTime() - time;
-            System.out.println("Run " + amount + ": " + +elapsed);
+            System.out.println("Run " + amount + ": " + elapsed);
             average += elapsed;
         }
 
@@ -72,8 +72,8 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
 
         var behaviours = new Array<RenderOrderBehaviour>();
         for (var i = 0; i < 100; i++)
-            behaviours
-                    .add(new RenderOrderBehaviour(random.nextInt(), new GameObject("" + i, BodyDefType.NoBody, unBox)));
+            behaviours.add(
+                    new RenderOrderBehaviour(random.nextFloat(), new GameObject("" + i, BodyDefType.NoBody, unBox)));
 
         unBox.postRender();
 
@@ -81,16 +81,16 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
         unBox.render(null);
 
         for (var behaviour : behaviours)
-            behaviour.setRenderOrder(random.nextInt());
+            behaviour.setRenderOrder(random.nextFloat());
 
         unBox.preRender(1);
         unBox.render(null);
     }
 
     private static class RenderOrderBehaviour extends BehaviourAdapter {
-        private static int previouslyRendered = Integer.MIN_VALUE;
+        private static float previouslyRendered = Float.MIN_VALUE;
 
-        public RenderOrderBehaviour(int renderOrder, GameObject gameObject) {
+        public RenderOrderBehaviour(float renderOrder, GameObject gameObject) {
             super(gameObject);
 
             setRenderOrder(renderOrder);
