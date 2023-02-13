@@ -11,8 +11,8 @@ import lombok.Getter;
 import lombok.Setter;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-public abstract class Behaviour {
-    @Getter private final GameObject gameObject;
+public abstract class Behaviour<TGameObject extends GameObject> {
+    @Getter private final TGameObject gameObject;
 
     private float renderOrder, executionOrder;
 
@@ -21,7 +21,7 @@ public abstract class Behaviour {
      */
     @Getter @Setter(AccessLevel.PACKAGE) private BehaviourState state = BehaviourState.NOT_IN_SYSTEM;
 
-    public Behaviour(GameObject gameObject) {
+    public Behaviour(TGameObject gameObject) {
         this.gameObject = gameObject;
 
         gameObject.getUnBox().addBehaviour(this);
@@ -74,7 +74,7 @@ public abstract class Behaviour {
      * @return True to cancel running the event
      */
 
-    public abstract boolean onCollisionPreSolve(GameObject other, Contact contact, Manifold oldManifold);
+    public abstract boolean onCollisionPreSolve(TGameObject other, Contact contact, Manifold oldManifold);
 
     /**
      *
@@ -83,7 +83,7 @@ public abstract class Behaviour {
      * @param impulse {@link ContactImpulse}
      * @return True to cancel running the event
      */
-    public abstract boolean onCollisionPostSolve(GameObject other, Contact contact, ContactImpulse impulse);
+    public abstract boolean onCollisionPostSolve(TGameObject other, Contact contact, ContactImpulse impulse);
 
     /**
      * This method gets called when a Box2D collision happens with this object.
@@ -91,7 +91,7 @@ public abstract class Behaviour {
      * @param other   The other object this object collides with.
      * @param contact Infos about the collision.
      */
-    public abstract void onCollisionEnter(GameObject other, Contact contact);
+    public abstract void onCollisionEnter(TGameObject other, Contact contact);
 
     /**
      * This method gets continuously called once per fixed update when a collision
@@ -99,7 +99,7 @@ public abstract class Behaviour {
      * 
      * @param other The other object this object collides with.
      */
-    public abstract void onCollisionStay(GameObject other);
+    public abstract void onCollisionStay(TGameObject other);
 
     /**
      * This method gets called when a Box2D collision stops with this object.
@@ -107,7 +107,7 @@ public abstract class Behaviour {
      * @param other   The other object this object stopped colliding with.
      * @param contact Infos about the collision.
      */
-    public abstract void onCollisionExit(GameObject other, Contact contact);
+    public abstract void onCollisionExit(TGameObject other, Contact contact);
 
     /**
      * A method which draws the behaviour onto the screen once a frame.
@@ -155,8 +155,8 @@ public abstract class Behaviour {
 
     /**
      * This function is called when the behaviour gets cleaned up in
-     * {@link UnBox#postRender()}.
-     * For example if you {@link UnBox#destroy(GameObject)} the game object or the
+     * {@link AbstractUnbox#postRender()}.
+     * For example if you {@link AbstractUnbox#destroy(GameObject)} the game object or the
      * behaviour itself.
      */
     public abstract void onDestroy();
@@ -168,7 +168,7 @@ public abstract class Behaviour {
         getGameObject().getUnBox().destroy(this);
     }
 
-    public UnBox getUnBox() {
+    public AbstractUnbox getUnBox() {
         return getGameObject().getUnBox();
     }
 
