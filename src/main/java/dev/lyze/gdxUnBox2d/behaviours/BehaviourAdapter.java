@@ -9,8 +9,8 @@ import dev.lyze.gdxUnBox2d.Behaviour;
 import dev.lyze.gdxUnBox2d.GameObject;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-public class BehaviourAdapter extends Behaviour {
-    public BehaviourAdapter(GameObject gameObject) {
+public class BehaviourAdapter<TGameObject extends GameObject> extends Behaviour<TGameObject> {
+    public BehaviourAdapter(TGameObject gameObject) {
         super(gameObject);
     }
 
@@ -40,27 +40,27 @@ public class BehaviourAdapter extends Behaviour {
     }
 
     @Override
-    public boolean onCollisionPreSolve(GameObject other, Contact contact, Manifold oldManifold) {
+    public boolean onCollisionPreSolve(TGameObject other, Contact contact, Manifold oldManifold) {
         return false;
     }
 
     @Override
-    public boolean onCollisionPostSolve(GameObject other, Contact contact, ContactImpulse impulse) {
+    public boolean onCollisionPostSolve(TGameObject other, Contact contact, ContactImpulse impulse) {
         return false;
     }
 
     @Override
-    public void onCollisionEnter(GameObject other, Contact contact) {
+    public void onCollisionEnter(TGameObject other, Contact contact) {
 
     }
 
     @Override
-    public void onCollisionStay(GameObject other) {
+    public void onCollisionStay(TGameObject other) {
 
     }
 
     @Override
-    public void onCollisionExit(GameObject other, Contact contact) {
+    public void onCollisionExit(TGameObject other, Contact contact) {
 
     }
 

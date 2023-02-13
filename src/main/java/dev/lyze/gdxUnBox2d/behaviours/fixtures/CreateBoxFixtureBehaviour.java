@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import dev.lyze.gdxUnBox2d.GameObject;
+import dev.lyze.gdxUnBox2d.Box2DGameObject;
 import lombok.Getter;
 
 /**
@@ -22,7 +22,7 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
      * @param hy         The half height
      * @param gameObject The game object to attach to.
      */
-    public CreateBoxFixtureBehaviour(float hx, float hy, GameObject gameObject) {
+    public CreateBoxFixtureBehaviour(float hx, float hy, Box2DGameObject gameObject) {
         this(hx, hy, Vector2.Zero, gameObject);
     }
 
@@ -34,7 +34,7 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
      * @param position   The center of the box
      * @param gameObject The game object to attach to.
      */
-    public CreateBoxFixtureBehaviour(float hx, float hy, Vector2 position, GameObject gameObject) {
+    public CreateBoxFixtureBehaviour(float hx, float hy, Vector2 position, Box2DGameObject gameObject) {
         this(hx, hy, position, new FixtureDef(), gameObject);
     }
 
@@ -48,7 +48,7 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
      * @param gameObject The game object to attach to.
      */
     public CreateBoxFixtureBehaviour(float hx, float hy, Vector2 position, FixtureDef fixtureDef,
-            GameObject gameObject) {
+            Box2DGameObject gameObject) {
         super(fixtureDef, gameObject);
 
         shape = new PolygonShape();
