@@ -222,7 +222,7 @@ public abstract class AbstractUnbox {
     }
 
     protected void onLateUpdateBehaviour(Behaviour behaviour, float delta) {
-        behaviour.update(delta);
+        behaviour.lateUpdate(delta);
     }
 
     private void renderGameObjects(Batch batch) {
