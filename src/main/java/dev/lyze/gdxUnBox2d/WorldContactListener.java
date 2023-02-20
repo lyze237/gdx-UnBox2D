@@ -46,13 +46,17 @@ public class WorldContactListener implements ContactListener {
         var a = unBox.findGameObject(contact.getFixtureA().getBody());
         var b = unBox.findGameObject(contact.getFixtureB().getBody());
 
-        var aBehaviours = unBox.gameObjects.get(a);
-        for (int i = 0; i < aBehaviours.size; i++)
-            aBehaviours.get(i).onCollisionExit(b, contact);
+        if (a != null) {
+            var aBehaviours = unBox.gameObjects.get(a);
+            for (int i = 0; i < aBehaviours.size; i++)
+                aBehaviours.get(i).onCollisionExit(b, contact);
+        }
 
-        var bBehaviours = unBox.gameObjects.get(b);
-        for (int i = 0; i < bBehaviours.size; i++)
-            bBehaviours.get(i).onCollisionExit(a, contact);
+        if (b != null) {
+            var bBehaviours = unBox.gameObjects.get(b);
+            for (int i = 0; i < bBehaviours.size; i++)
+                bBehaviours.get(i).onCollisionExit(a, contact);
+        }
 
         for (int i = collidingEntities.size - 1; i >= 0; i--) {
             if (collidingEntities.get(i).is(a, b)) {
@@ -109,7 +113,7 @@ public class WorldContactListener implements ContactListener {
     }
 
     void destroy(GameObject gameObject) {
-        for (int i = collidingEntities.size - 1; i > 0; i--)
+        for (int i = collidingEntities.size - 1; i >= 0; i--)
             if (collidingEntities.get(i).contains(gameObject))
                 collidingEntitiesPool.free(collidingEntities.removeIndex(i));
     }
