@@ -30,7 +30,7 @@ import java.util.Comparator;
 public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
     @Getter private final PhysicsOptions options = new PhysicsOptions();
 
-    @Getter private final TPhysicsWorld world;
+    @Getter private final TPhysicsWorld physicsWorld;
 
     final OrderedMap<GameObject, Array<Behaviour>> gameObjects = new OrderedMap<>();
     final Array<Behaviour> behavioursToRender = new Array<>();
@@ -46,9 +46,9 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
     /**
      * Instantiates an instance of this object.
      */
-    public UnBox(TPhysicsWorld world) {
-        this.world = world;
-        world.setUnBox(this);
+    public UnBox(TPhysicsWorld physicsWorld) {
+        this.physicsWorld = physicsWorld;
+        physicsWorld.setUnBox(this);
     }
 
     /**
@@ -179,7 +179,7 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
 
             updateFixedObjects();
 
-            world.step(timeStep);
+            physicsWorld.step(timeStep);
             accumulator -= timeStep;
         }
     }

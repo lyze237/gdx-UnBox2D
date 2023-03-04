@@ -58,7 +58,7 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         unBox.preRender(Gdx.graphics.getDeltaTime());
 
         viewport.apply();
-        debugRenderer.render(unBox.getWorld().getWorld(), viewport.getCamera().combined);
+        debugRenderer.render(unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
 
         unBox.postRender();
     }

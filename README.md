@@ -39,15 +39,19 @@ public class CoolGame extends Game {
         debugRenderer = new Box2DDebugRenderer();
 
         // Create an instance of the library, with no gravity
-        unBox = new UnBox(new Vector2(0, 0), true);
+        unBox = new UnBox<>(new NoPhysicsWorld()); // Alternative if you want to use physics: new UnBox<>(new Box2dPhysicsWorld(new World(new Vector2(0, 0), true)));
 
         // Create two game objects, those get automatically added to the libraries instance
         var rightGo = new GameObject(unBox);
         var leftGo = new GameObject(unBox);
+        
+        // Attach a Box2D body
+      new Box2dBehaviour(BodyDefType.DynamicBody, rightGo);
+      new Box2dBehaviour(BodyDefType.DynamicBody, leftGo);
 
         // Attach a logging behaviour to both of the game objects
-        new SoutBehaviour(BodyDefType.DynamicBody, "Right GO", false, rightGo);
-        new SoutBehaviour(BodyDefType.DynamicBody, "Left GO", false, leftGo);
+        new SoutBehaviour("Right GO", false, rightGo);
+        new SoutBehaviour("Left GO", false, leftGo);
 
         // Attach a movement behaviour to both game objects
         new MoveBehaviour(true, rightGo);
@@ -71,7 +75,7 @@ public class CoolGame extends Game {
         batch.end();
 
         // Debug render all box2d bodies
-        debugRenderer.render(unBox.getWorld(), viewport.getCamera().combined);
+        debugRenderer.render(unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
 
         // Clean up render loop
         unBox.postRender();
