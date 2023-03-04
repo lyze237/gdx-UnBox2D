@@ -3,25 +3,25 @@ package dev.lyze.gdxUnBox2d.headless.tests;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import dev.lyze.gdxUnBox2d.*;
+import dev.lyze.gdxUnBox2d.BodyDefType;
+import dev.lyze.gdxUnBox2d.GameObject;
+import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
-import dev.lyze.gdxUnBox2d.Box2DGameObject;
-import dev.lyze.gdxUnBox2d.box2D.BodyDefType;
 import dev.lyze.gdxUnBox2d.headless.LibgdxHeadlessUnitTest;
+import java.util.Random;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Random;
-
 public class HeaderTest extends LibgdxHeadlessUnitTest {
     @Test
     public void PerfTest() {
-        var unBox = new Box2DUnBox();
+        var unBox = new UnBox();
 
-        for (int i = 0; i < 100_000; i++)
-            new Box2DGameObject(BodyDefType.NoBody, unBox);
+        for (int i = 0; i < 100_000; i++) {
+            new GameObject(BodyDefType.NoBody, unBox);
+        }
 
         var average = 0L;
         for (int amount = 0; amount < 20; amount++) {
@@ -44,8 +44,8 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
     public void EnabledDisabledTest() {
         var unBox = new UnBox();
 
-        var enabledGo = new GameObject(unBox);
-        var disabledGo = new GameObject(false, unBox);
+        var enabledGo = new GameObject(BodyDefType.NoBody, unBox);
+        var disabledGo = new GameObject(false, BodyDefType.NoBody, unBox);
 
         new SoutBehaviour("Enabled GO", true, enabledGo);
         new SoutBehaviour("Disabled GO", true, disabledGo);
@@ -73,7 +73,7 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
         var behaviours = new Array<RenderOrderBehaviour>();
         for (var i = 0; i < 100; i++)
             behaviours.add(
-                    new RenderOrderBehaviour(random.nextFloat(), new GameObject("" + i, unBox)));
+                    new RenderOrderBehaviour(random.nextFloat(), new GameObject("" + i, BodyDefType.NoBody, unBox)));
 
         unBox.postRender();
 
@@ -87,7 +87,7 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
         unBox.render(null);
     }
 
-    private static class RenderOrderBehaviour extends BehaviourAdapter<GameObject> {
+    private static class RenderOrderBehaviour extends BehaviourAdapter {
         private static float previouslyRendered = Float.MIN_VALUE;
 
         public RenderOrderBehaviour(float renderOrder, GameObject gameObject) {

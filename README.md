@@ -27,7 +27,7 @@ public class CoolGame extends Game {
 
     private SpriteBatch batch;
 
-    private Box2DUnBox unBox;
+    private UnBox unBox;
     private Box2DDebugRenderer debugRenderer;
 
     @Override
@@ -39,7 +39,7 @@ public class CoolGame extends Game {
         debugRenderer = new Box2DDebugRenderer();
 
         // Create an instance of the library, with no gravity
-        unBox = new Box2DUnBox(new Vector2(0, 0), true);
+        unBox = new UnBox(new Vector2(0, 0), true);
 
         // Create two game objects, those get automatically added to the libraries instance
         var rightGo = new GameObject(unBox);
