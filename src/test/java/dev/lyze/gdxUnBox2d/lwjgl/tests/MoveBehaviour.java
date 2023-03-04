@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
+import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import lombok.var;
 
 public class MoveBehaviour extends BehaviourAdapter {
@@ -23,18 +24,18 @@ public class MoveBehaviour extends BehaviourAdapter {
         var fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
 
-        getGameObject().getBody().createFixture(fixtureDef);
+        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().createFixture(fixtureDef);
         shape.dispose();
 
-        getGameObject().getBody().setTransform(5 * (right ? 1 : -1), 0, 0);
+        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().setTransform(5 * (right ? 1 : -1), 0, 0);
     }
 
     @Override
     public void fixedUpdate() {
-        var position = getGameObject().getBody().getPosition();
+        var position = getGameObject().getBehaviour(Box2dBehaviour.class).getBody().getPosition();
         if (right && position.x < -8)
             return;
 
-        getGameObject().getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0, position.x, position.y, true);
+        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0, position.x, position.y, true);
     }
 }

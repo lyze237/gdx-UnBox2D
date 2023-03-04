@@ -4,13 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.lyze.gdxUnBox2d.BodyDefType;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
+import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.lwjgl.LibgdxLwjglUnitTest;
+import dev.lyze.gdxUnBox2d.Box2dPhysicsWorld;
 import lombok.var;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,7 @@ import org.junit.jupiter.api.Test;
 public class MoveTest extends LibgdxLwjglUnitTest {
     private Viewport viewport;
 
-    private UnBox unBox;
+    private UnBox<Box2dPhysicsWorld> unBox;
     private Box2DDebugRenderer debugRenderer;
 
     @Override
@@ -26,17 +29,19 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         viewport = new FitViewport(30, 10);
         viewport.getCamera().translate(-5, 0, 0);
 
-        unBox = new UnBox();
+        unBox = new UnBox<>(new Box2dPhysicsWorld(new World(new Vector2(0, 0), true)));
         debugRenderer = new Box2DDebugRenderer();
     }
 
     @Test
     @Tag("lwjgl")
     public void MovementTest() {
-        unBox = new UnBox(new Vector2(0, 0), true);
+        unBox = new UnBox<>(new Box2dPhysicsWorld(new World(new Vector2(0, 0), true)));
 
-        var rightGo = new GameObject(BodyDefType.DynamicBody, unBox);
-        var leftGo = new GameObject(BodyDefType.DynamicBody, unBox);
+        var rightGo = new GameObject(unBox);
+        new Box2dBehaviour(BodyDefType.DynamicBody, rightGo);
+        var leftGo = new GameObject(unBox);
+        new Box2dBehaviour(BodyDefType.DynamicBody, leftGo);
 
         new SoutBehaviour("Right GO", false, rightGo);
         new SoutBehaviour("Left GO", false, leftGo);
@@ -53,7 +58,7 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         unBox.preRender(Gdx.graphics.getDeltaTime());
 
         viewport.apply();
-        debugRenderer.render(unBox.getWorld(), viewport.getCamera().combined);
+        debugRenderer.render(unBox.getWorld().getWorld(), viewport.getCamera().combined);
 
         unBox.postRender();
     }

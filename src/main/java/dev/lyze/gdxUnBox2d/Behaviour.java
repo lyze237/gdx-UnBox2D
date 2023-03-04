@@ -74,7 +74,7 @@ public abstract class Behaviour {
      * @return True to cancel running the event
      */
 
-    public abstract boolean onCollisionPreSolve(GameObject other, Contact contact, Manifold oldManifold);
+    public abstract boolean onCollisionPreSolve(Behaviour other, Contact contact, Manifold oldManifold);
 
     /**
      *
@@ -83,7 +83,7 @@ public abstract class Behaviour {
      * @param impulse {@link ContactImpulse}
      * @return True to cancel running the event
      */
-    public abstract boolean onCollisionPostSolve(GameObject other, Contact contact, ContactImpulse impulse);
+    public abstract boolean onCollisionPostSolve(Behaviour other, Contact contact, ContactImpulse impulse);
 
     /**
      * This method gets called when a Box2D collision happens with this object.
@@ -91,7 +91,7 @@ public abstract class Behaviour {
      * @param other   The other object this object collides with.
      * @param contact Infos about the collision.
      */
-    public abstract void onCollisionEnter(GameObject other, Contact contact);
+    public abstract void onCollisionEnter(Behaviour other, Contact contact);
 
     /**
      * This method gets continuously called once per fixed update when a collision
@@ -99,7 +99,7 @@ public abstract class Behaviour {
      * 
      * @param other The other object this object collides with.
      */
-    public abstract void onCollisionStay(GameObject other);
+    public abstract void onCollisionStay(Behaviour other);
 
     /**
      * This method gets called when a Box2D collision stops with this object.
@@ -107,7 +107,7 @@ public abstract class Behaviour {
      * @param other   The other object this object stopped colliding with.
      * @param contact Infos about the collision.
      */
-    public abstract void onCollisionExit(GameObject other, Contact contact);
+    public abstract void onCollisionExit(Behaviour other, Contact contact);
 
     /**
      * A method which draws the behaviour onto the screen once a frame.
@@ -164,11 +164,11 @@ public abstract class Behaviour {
     /**
      * Marks the behaviour for deletion at the end of the current frame.
      */
-    public void destroy() {
+    /*public void destroy() {
         getGameObject().getUnBox().destroy(this);
-    }
+    }*/
 
-    public UnBox getUnBox() {
+    public UnBox<?> getUnBox() {
         return getGameObject().getUnBox();
     }
 

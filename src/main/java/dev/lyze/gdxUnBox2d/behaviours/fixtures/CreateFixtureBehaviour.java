@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
+import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import lombok.AccessLevel;
 import lombok.Getter;
 
@@ -39,7 +40,7 @@ public abstract class CreateFixtureBehaviour extends BehaviourAdapter {
     protected void createAndAttachFixture(Shape shape) {
         fixtureDef.shape = shape;
 
-        fixture = getGameObject().getBody().createFixture(fixtureDef);
+        fixture = getGameObject().getBehaviour(Box2dBehaviour.class).getBody().createFixture(fixtureDef);
         shape.dispose();
     }
 }

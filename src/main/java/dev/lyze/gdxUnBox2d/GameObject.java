@@ -1,7 +1,5 @@
 package dev.lyze.gdxUnBox2d;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +10,7 @@ import lombok.var;
  * Main game object of the UnBox library. Holds a Box2D body and behaviours.
  */
 public final class GameObject {
-    @Getter private final UnBox unBox;
+    @Getter private final UnBox<?> unBox;
 
     /**
      * When the game object is enabled all its behaviours receive event calls.
@@ -25,11 +23,6 @@ public final class GameObject {
     @Getter @Setter private String name;
 
     /**
-     * Physics body of the game object.
-     */
-    @Getter @Setter(AccessLevel.PACKAGE) private Body body;
-
-    /**
      * Lifecycle state of the game object.
      */
     @Getter @Setter(AccessLevel.PACKAGE) private GameObjectState state = GameObjectState.NOT_IN_SYSTEM;
@@ -39,24 +32,20 @@ public final class GameObject {
     /**
      * Creates a new enabled game object with a dynamic body.
      *
-     * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
-     *              should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(BodyDefType type, UnBox unBox) {
-        this("Game Object", type, unBox);
+    public GameObject(UnBox<?> unBox) {
+        this("Game Object", unBox);
     }
 
     /**
      * Creates a new enabled game object with a dynamic body.
      *
      * @param name  The name of the game object.
-     * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
-     *              should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(String name, BodyDefType type, UnBox unBox) {
-        this(name, true, type, unBox);
+    public GameObject(String name, UnBox<?> unBox) {
+        this(name, true, unBox);
     }
 
     /**
@@ -66,12 +55,10 @@ public final class GameObject {
      *                {@link GameObject#setEnabled(boolean)},
      *                {@link Behaviour#onEnable()} and
      *                {@link Behaviour#onDisable()}.
-     * @param type    The Box2D body type, or {@link BodyDefType#NoBody} if no body
-     *                should be created.
      * @param unBox   The libraries instance.
      */
-    public GameObject(boolean enabled, BodyDefType type, UnBox unBox) {
-        this("Game Object", enabled, type, unBox);
+    public GameObject(boolean enabled, UnBox<?> unBox) {
+        this("Game Object", enabled, unBox);
     }
 
     /**
@@ -82,32 +69,14 @@ public final class GameObject {
      *                {@link GameObject#setEnabled(boolean)},
      *                {@link Behaviour#onEnable()} and
      *                {@link Behaviour#onDisable()}.
-     * @param type    The Box2D body type, or {@link BodyDefType#NoBody} if no body
-     *                should be created.
      * @param unBox   The libraries instance.
      */
-    public GameObject(String name, boolean enabled, BodyDefType type, UnBox unBox) {
+    public GameObject(String name, boolean enabled, UnBox<?> unBox) {
         this.unBox = unBox;
         this.enabled = enabled;
         this.name = name;
 
-        BodyDef bodyDef = null;
-        if (type != BodyDefType.NoBody)
-            bodyDef = new BodyDef();
-
-        switch (type) {
-            case StaticBody:
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                break;
-            case KinematicBody:
-                bodyDef.type = BodyDef.BodyType.KinematicBody;
-                break;
-            case DynamicBody:
-                bodyDef.type = BodyDef.BodyType.DynamicBody;
-                break;
-        }
-
-        unBox.addGameObject(this, bodyDef);
+        unBox.addGameObject(this);
     }
 
     /**
@@ -127,8 +96,6 @@ public final class GameObject {
             else
                 behaviour.onDisable();
         }
-
-        body.setActive(enabled);
     }
 
     /**
@@ -143,6 +110,12 @@ public final class GameObject {
         for (var i = 0; i < behaviours.size; i++)
             if (behaviours.get(i).getClass().equals(behaviourClass))
                 return (T) behaviours.get(i);
+
+        for (var i = 0; i < unBox.destroyedBehavioursInFrame.size; i++) {
+            Behaviour behaviour = unBox.destroyedBehavioursInFrame.get(i);
+            if (behaviour.getGameObject().equals(this) && behaviour.getClass().equals(behaviourClass))
+                return (T) behaviours.get(i);
+        }
 
         return null;
     }
@@ -174,6 +147,12 @@ public final class GameObject {
         for (var i = 0; i < behaviours.size; i++)
             if (behaviours.get(i).getClass().equals(behaviourClass))
                 tempStorage.add((T) behaviours.get(i));
+
+        for (var i = 0; i < unBox.destroyedBehavioursInFrame.size; i++) {
+            Behaviour behaviour = unBox.destroyedBehavioursInFrame.get(i);
+            if (behaviour.getGameObject().equals(this) && behaviour.getClass().equals(behaviourClass))
+                tempStorage.add((T) behaviours.get(i));
+        }
 
         return tempStorage;
     }
