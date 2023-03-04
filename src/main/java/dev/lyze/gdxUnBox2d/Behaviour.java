@@ -164,9 +164,9 @@ public abstract class Behaviour {
     /**
      * Marks the behaviour for deletion at the end of the current frame.
      */
-    /*public void destroy() {
+    public void destroy() {
         getGameObject().getUnBox().destroy(this);
-    }*/
+    }
 
     public UnBox<?> getUnBox() {
         return getGameObject().getUnBox();
