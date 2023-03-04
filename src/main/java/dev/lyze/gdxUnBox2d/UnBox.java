@@ -41,7 +41,6 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
 
     private final Array<Behaviour> behavioursToAdd = new Array<>();
     private final Array<Behaviour> behavioursToDestroy = new Array<>();
-    final Array<Behaviour> destroyedBehavioursInFrame = new Array<>();
 
     /**
      * Instantiates an instance of this object.
@@ -145,7 +144,18 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
 
         destroyGameObjects();
         destroyBehaviours();
-        destroyedBehavioursInFrame.clear();
+
+        for (int i = gameObjects.orderedKeys().size - 1; i >= 0; i--) {
+            var gameObject = gameObjects.orderedKeys().get(i);
+            var behaviours = gameObjects.get(gameObject);
+
+            for (int j = behaviours.size - 1; j >= 0; j--)
+                if (behaviours.get(j).getState() == BehaviourState.DESTROYED)
+                    behaviours.removeIndex(j);
+
+            if (gameObject.getState() == GameObjectState.DESTROYED)
+                gameObjects.removeIndex(i);
+        }
     }
 
     private void startBehaviours() {
@@ -285,10 +295,6 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
     private void destroyBehaviours() {
         for (int i = 0; i < behavioursToDestroy.size; i++) {
             var behaviour = behavioursToDestroy.get(i);
-            destroyedBehavioursInFrame.add(behaviour);
-
-            if (gameObjects.containsKey(behaviour.getGameObject()))
-                gameObjects.get(behaviour.getGameObject()).removeValue(behaviour, true);
 
             if (behaviour.getGameObject().isEnabled())
                 behaviour.onDisable();
@@ -311,7 +317,6 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
             for (int j = 0; j < behaviours.size; j++)
                 behavioursToDestroy.add(behaviours.get(j));
 
-            gameObjects.remove(gameObject);
             gameObject.setState(GameObjectState.DESTROYED);
 
             invalidateRenderOrder = true;

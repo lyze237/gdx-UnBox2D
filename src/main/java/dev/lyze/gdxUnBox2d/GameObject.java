@@ -111,12 +111,6 @@ public final class GameObject {
             if (behaviours.get(i).getClass().equals(behaviourClass))
                 return (T) behaviours.get(i);
 
-        for (var i = 0; i < unBox.destroyedBehavioursInFrame.size; i++) {
-            Behaviour behaviour = unBox.destroyedBehavioursInFrame.get(i);
-            if (behaviour.getGameObject().equals(this) && behaviour.getClass().equals(behaviourClass))
-                return (T) behaviours.get(i);
-        }
-
         return null;
     }
 
@@ -147,12 +141,6 @@ public final class GameObject {
         for (var i = 0; i < behaviours.size; i++)
             if (behaviours.get(i).getClass().equals(behaviourClass))
                 tempStorage.add((T) behaviours.get(i));
-
-        for (var i = 0; i < unBox.destroyedBehavioursInFrame.size; i++) {
-            Behaviour behaviour = unBox.destroyedBehavioursInFrame.get(i);
-            if (behaviour.getGameObject().equals(this) && behaviour.getClass().equals(behaviourClass))
-                tempStorage.add((T) behaviours.get(i));
-        }
 
         return tempStorage;
     }
