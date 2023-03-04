@@ -2,14 +2,14 @@ package dev.lyze.gdxUnBox2d.lwjgl.tests;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import dev.lyze.gdxUnBox2d.Box2DGameObject;
+import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import lombok.var;
 
-public class MoveBehaviour extends BehaviourAdapter<Box2DGameObject> {
+public class MoveBehaviour extends BehaviourAdapter {
     private final boolean right;
 
-    public MoveBehaviour(boolean right, Box2DGameObject gameObject) {
+    public MoveBehaviour(boolean right, GameObject gameObject) {
         super(gameObject);
 
         this.right = right;

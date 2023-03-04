@@ -1,5 +1,7 @@
 package dev.lyze.gdxUnBox2d;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.utils.Array;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,8 +11,8 @@ import lombok.var;
 /**
  * Main game object of the UnBox library. Holds a Box2D body and behaviours.
  */
-public class GameObject {
-    @Getter private final AbstractUnbox unBox;
+public final class GameObject {
+    @Getter private final UnBox unBox;
 
     /**
      * When the game object is enabled all its behaviours receive event calls.
@@ -23,6 +25,11 @@ public class GameObject {
     @Getter @Setter private String name;
 
     /**
+     * Physics body of the game object.
+     */
+    @Getter @Setter(AccessLevel.PACKAGE) private Body body;
+
+    /**
      * Lifecycle state of the game object.
      */
     @Getter @Setter(AccessLevel.PACKAGE) private GameObjectState state = GameObjectState.NOT_IN_SYSTEM;
@@ -32,20 +39,24 @@ public class GameObject {
     /**
      * Creates a new enabled game object with a dynamic body.
      *
+     * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *              should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(AbstractUnbox unBox) {
-        this("Game Object", unBox);
+    public GameObject(BodyDefType type, UnBox unBox) {
+        this("Game Object", type, unBox);
     }
 
     /**
      * Creates a new enabled game object with a dynamic body.
      *
      * @param name  The name of the game object.
+     * @param type  The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *              should be created.
      * @param unBox The libraries instance.
      */
-    public GameObject(String name, AbstractUnbox unBox) {
-        this(name, true, unBox);
+    public GameObject(String name, BodyDefType type, UnBox unBox) {
+        this(name, true, type, unBox);
     }
 
     /**
@@ -55,10 +66,12 @@ public class GameObject {
      *                {@link GameObject#setEnabled(boolean)},
      *                {@link Behaviour#onEnable()} and
      *                {@link Behaviour#onDisable()}.
+     * @param type    The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *                should be created.
      * @param unBox   The libraries instance.
      */
-    public GameObject(boolean enabled, AbstractUnbox unBox) {
-        this("Game Object", enabled, unBox);
+    public GameObject(boolean enabled, BodyDefType type, UnBox unBox) {
+        this("Game Object", enabled, type, unBox);
     }
 
     /**
@@ -69,14 +82,32 @@ public class GameObject {
      *                {@link GameObject#setEnabled(boolean)},
      *                {@link Behaviour#onEnable()} and
      *                {@link Behaviour#onDisable()}.
+     * @param type    The Box2D body type, or {@link BodyDefType#NoBody} if no body
+     *                should be created.
      * @param unBox   The libraries instance.
      */
-    public GameObject(String name, boolean enabled, AbstractUnbox unBox) {
+    public GameObject(String name, boolean enabled, BodyDefType type, UnBox unBox) {
         this.unBox = unBox;
         this.enabled = enabled;
         this.name = name;
 
-        unBox.addGameObject(this);
+        BodyDef bodyDef = null;
+        if (type != BodyDefType.NoBody)
+            bodyDef = new BodyDef();
+
+        switch (type) {
+            case StaticBody:
+                bodyDef.type = BodyDef.BodyType.StaticBody;
+                break;
+            case KinematicBody:
+                bodyDef.type = BodyDef.BodyType.KinematicBody;
+                break;
+            case DynamicBody:
+                bodyDef.type = BodyDef.BodyType.DynamicBody;
+                break;
+        }
+
+        unBox.addGameObject(this, bodyDef);
     }
 
     /**
@@ -96,6 +127,8 @@ public class GameObject {
             else
                 behaviour.onDisable();
         }
+
+        body.setActive(enabled);
     }
 
     /**

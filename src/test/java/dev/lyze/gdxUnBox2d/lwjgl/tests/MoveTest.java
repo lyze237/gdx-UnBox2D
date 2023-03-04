@@ -6,10 +6,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import dev.lyze.gdxUnBox2d.*;
+import dev.lyze.gdxUnBox2d.BodyDefType;
+import dev.lyze.gdxUnBox2d.GameObject;
+import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
-import dev.lyze.gdxUnBox2d.Box2DGameObject;
-import dev.lyze.gdxUnBox2d.box2D.BodyDefType;
 import dev.lyze.gdxUnBox2d.lwjgl.LibgdxLwjglUnitTest;
 import lombok.var;
 import org.junit.jupiter.api.Tag;
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 public class MoveTest extends LibgdxLwjglUnitTest {
     private Viewport viewport;
 
-    private Box2DUnBox unBox;
+    private UnBox unBox;
     private Box2DDebugRenderer debugRenderer;
 
     @Override
@@ -26,17 +26,17 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         viewport = new FitViewport(30, 10);
         viewport.getCamera().translate(-5, 0, 0);
 
-        unBox = new Box2DUnBox();
+        unBox = new UnBox();
         debugRenderer = new Box2DDebugRenderer();
     }
 
     @Test
     @Tag("lwjgl")
     public void MovementTest() {
-        unBox = new Box2DUnBox(new Vector2(0, 0), true);
+        unBox = new UnBox(new Vector2(0, 0), true);
 
-        var rightGo = new Box2DGameObject(BodyDefType.DynamicBody, unBox);
-        var leftGo = new Box2DGameObject(BodyDefType.DynamicBody, unBox);
+        var rightGo = new GameObject(BodyDefType.DynamicBody, unBox);
+        var leftGo = new GameObject(BodyDefType.DynamicBody, unBox);
 
         new SoutBehaviour("Right GO", false, rightGo);
         new SoutBehaviour("Left GO", false, leftGo);

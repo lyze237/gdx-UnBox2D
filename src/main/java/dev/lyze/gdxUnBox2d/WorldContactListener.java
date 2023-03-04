@@ -11,7 +11,7 @@ import lombok.Setter;
 import lombok.var;
 
 public class WorldContactListener implements ContactListener {
-    private final Box2DUnBox unBox;
+    private final UnBox unBox;
 
     private final Array<WorldContactListenerEntity> collidingEntities = new Array<>();
     private final Pool<WorldContactListenerEntity> collidingEntitiesPool = new Pool<WorldContactListenerEntity>() {
@@ -21,7 +21,7 @@ public class WorldContactListener implements ContactListener {
         }
     };
 
-    public WorldContactListener(Box2DUnBox unBox) {
+    public WorldContactListener(UnBox unBox) {
         this.unBox = unBox;
     }
 
