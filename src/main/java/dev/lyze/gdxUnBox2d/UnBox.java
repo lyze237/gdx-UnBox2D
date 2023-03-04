@@ -4,17 +4,14 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
-import java.util.Comparator;
 import lombok.Getter;
 import lombok.var;
 import space.earlygrey.shapedrawer.ShapeDrawer;
+
+import java.util.Comparator;
 
 // https://docs.unity3d.com/Manual/ExecutionOrder.html
 
@@ -30,41 +27,28 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
  * {@link ApplicationListener#render()} loop in this order.
  * </p>
  */
-public class UnBox {
-    @Getter private final PhysicsOptions physicsOptions = new PhysicsOptions();
+public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
+    @Getter private final PhysicsOptions options = new PhysicsOptions();
 
-    @Getter private final World world;
+    @Getter private final TPhysicsWorld world;
 
     final OrderedMap<GameObject, Array<Behaviour>> gameObjects = new OrderedMap<>();
     final Array<Behaviour> behavioursToRender = new Array<>();
     private boolean invalidateRenderOrder;
 
-    private final OrderedMap<GameObject, BodyDef> gameObjectsToAdd = new OrderedMap<>();
+    private final Array<GameObject> gameObjectsToAdd = new Array<>();
     private final Array<GameObject> gameObjectsToDestroy = new Array<>();
 
     private final Array<Behaviour> behavioursToAdd = new Array<>();
     private final Array<Behaviour> behavioursToDestroy = new Array<>();
-
-    private final WorldContactListener contactListener;
-
-    /**
-     * Instantiates an instance of this object with gravity set to (0, -10) and
-     * doSleep set to true.
-     */
-    public UnBox() {
-        this(new Vector2(0, -10), true);
-    }
+    final Array<Behaviour> destroyedBehavioursInFrame = new Array<>();
 
     /**
-     * Instantiates an instance of this object with physics set to (0, -10) and body
-     * sleep set to true.
-     * 
-     * @param gravity The gravity of the Box2D world.
-     * @param doSleep Ignore physics simulation for inactive Box2D bodies.
+     * Instantiates an instance of this object.
      */
-    public UnBox(Vector2 gravity, boolean doSleep) {
-        world = new World(gravity, doSleep);
-        world.setContactListener(contactListener = new WorldContactListener(this));
+    public UnBox(TPhysicsWorld world) {
+        this.world = world;
+        world.setUnBox(this);
     }
 
     /**
@@ -161,6 +145,7 @@ public class UnBox {
 
         destroyGameObjects();
         destroyBehaviours();
+        destroyedBehavioursInFrame.clear();
     }
 
     private void startBehaviours() {
@@ -187,15 +172,14 @@ public class UnBox {
     private void fixedUpdate(float delta) {
         // fixed time step
         // max frame time to avoid spiral of death (on slow devices)
-        float frameTime = Math.min(delta, physicsOptions.getMaxFixedFrameTime());
+        float frameTime = Math.min(delta, options.getMaxFixedFrameTime());
         accumulator += frameTime;
-        while (accumulator >= physicsOptions.getTimeStep()) {
-            var timeStep = physicsOptions.getTimeStep();
+        while (accumulator >= options.getTimeStep()) {
+            var timeStep = options.getTimeStep();
 
             updateFixedObjects();
 
-            world.step(timeStep, physicsOptions.getVelocityIteration(), physicsOptions.getPositionIterations());
-            contactListener.update();
+            world.step(timeStep);
             accumulator -= timeStep;
         }
     }
@@ -267,14 +251,10 @@ public class UnBox {
     }
 
     private void instantiateGameObjects() {
-        for (int i = 0; i < gameObjectsToAdd.orderedKeys().size; i++) {
-            var gameObject = gameObjectsToAdd.orderedKeys().get(i);
+        for (int i = 0; i < gameObjectsToAdd.size; i++) {
+            var gameObject = gameObjectsToAdd.get(i);
 
             gameObjects.put(gameObject, new Array<>());
-            var bodyDef = gameObjectsToAdd.get(gameObject);
-            if (bodyDef != null)
-                gameObject.setBody(world.createBody(bodyDef));
-
             gameObject.setState(GameObjectState.ALIVE);
 
             invalidateRenderOrder = true;
@@ -305,6 +285,7 @@ public class UnBox {
     private void destroyBehaviours() {
         for (int i = 0; i < behavioursToDestroy.size; i++) {
             var behaviour = behavioursToDestroy.get(i);
+            destroyedBehavioursInFrame.add(behaviour);
 
             if (gameObjects.containsKey(behaviour.getGameObject()))
                 gameObjects.get(behaviour.getGameObject()).removeValue(behaviour, true);
@@ -326,11 +307,6 @@ public class UnBox {
         for (int i = 0; i < gameObjectsToDestroy.size; i++) {
             var gameObject = gameObjectsToDestroy.get(i);
 
-            if (gameObject.getBody() != null) {
-                contactListener.destroy(gameObject);
-                world.destroyBody(gameObject.getBody());
-            }
-
             var behaviours = gameObjects.get(gameObject);
             for (int j = 0; j < behaviours.size; j++)
                 behavioursToDestroy.add(behaviours.get(j));
@@ -344,10 +320,10 @@ public class UnBox {
         gameObjectsToDestroy.clear();
     }
 
-    void addGameObject(GameObject go, BodyDef bodyDef) {
+    void addGameObject(GameObject go) {
         go.setState(GameObjectState.ADDING);
 
-        gameObjectsToAdd.put(go, bodyDef);
+        gameObjectsToAdd.add(go);
     }
 
     void addBehaviour(Behaviour behaviour) {
@@ -382,23 +358,6 @@ public class UnBox {
         }
 
         gameObjectsToDestroy.add(go);
-    }
-
-    /**
-     * Helper method to find the game object based on a Box2D Body.
-     * 
-     * @param body The Box2D body to search for.
-     * @return The GameObject if found, or null.
-     */
-    public GameObject findGameObject(Body body) {
-        for (int i = 0; i < gameObjects.orderedKeys().size; i++) {
-            var gameObject = gameObjects.orderedKeys().get(i);
-
-            if (gameObject.getBody().equals(body))
-                return gameObject;
-        }
-
-        return null;
     }
 
     /**

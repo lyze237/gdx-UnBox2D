@@ -40,27 +40,27 @@ public class BehaviourAdapter extends Behaviour {
     }
 
     @Override
-    public boolean onCollisionPreSolve(GameObject other, Contact contact, Manifold oldManifold) {
+    public boolean onCollisionPreSolve(Behaviour other, Contact contact, Manifold oldManifold) {
         return false;
     }
 
     @Override
-    public boolean onCollisionPostSolve(GameObject other, Contact contact, ContactImpulse impulse) {
+    public boolean onCollisionPostSolve(Behaviour other, Contact contact, ContactImpulse impulse) {
         return false;
     }
 
     @Override
-    public void onCollisionEnter(GameObject other, Contact contact) {
+    public void onCollisionEnter(Behaviour other, Contact contact) {
 
     }
 
     @Override
-    public void onCollisionStay(GameObject other) {
+    public void onCollisionStay(Behaviour other) {
 
     }
 
     @Override
-    public void onCollisionExit(GameObject other, Contact contact) {
+    public void onCollisionExit(Behaviour other, Contact contact) {
 
     }
 

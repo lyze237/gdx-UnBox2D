@@ -3,24 +3,25 @@ package dev.lyze.gdxUnBox2d.headless.tests;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import dev.lyze.gdxUnBox2d.BodyDefType;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.headless.LibgdxHeadlessUnitTest;
-import java.util.Random;
+import dev.lyze.gdxUnBox2d.NoPhysicsWorld;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Random;
+
 public class HeaderTest extends LibgdxHeadlessUnitTest {
     @Test
     public void PerfTest() {
-        var unBox = new UnBox();
+        var unBox = new UnBox<>(new NoPhysicsWorld());
 
         for (int i = 0; i < 100_000; i++) {
-            new GameObject(BodyDefType.NoBody, unBox);
+            new GameObject(unBox);
         }
 
         var average = 0L;
@@ -42,10 +43,10 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
 
     @Test
     public void EnabledDisabledTest() {
-        var unBox = new UnBox();
+        var unBox = new UnBox<>(new NoPhysicsWorld());
 
-        var enabledGo = new GameObject(BodyDefType.NoBody, unBox);
-        var disabledGo = new GameObject(false, BodyDefType.NoBody, unBox);
+        var enabledGo = new GameObject(unBox);
+        var disabledGo = new GameObject(false, unBox);
 
         new SoutBehaviour("Enabled GO", true, enabledGo);
         new SoutBehaviour("Disabled GO", true, disabledGo);
@@ -67,13 +68,12 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
 
     @Test
     public void RenderOrderTest() {
-        var unBox = new UnBox();
+        var unBox = new UnBox<>(new NoPhysicsWorld());
         var random = new Random();
 
         var behaviours = new Array<RenderOrderBehaviour>();
         for (var i = 0; i < 100; i++)
-            behaviours.add(
-                    new RenderOrderBehaviour(random.nextFloat(), new GameObject("" + i, BodyDefType.NoBody, unBox)));
+            behaviours.add(new RenderOrderBehaviour(random.nextFloat(), new GameObject("" + i, unBox)));
 
         unBox.postRender();
 
