@@ -1,6 +1,6 @@
 # gdx-UnBox2D (Unity Box2D)
 
-A libGDX library to couple Unity's behaviour system and execution order with libGDX. Also supports Box2D and custom physics engines.
+A libGDX library to couple Unity's behaviour system and execution order with Box2D.
 
 [![License](https://img.shields.io/github/license/lyze237/gdx-UnBox2D)](https://github.com/lyze237/gdx-UnBox2D/blob/main/LICENSE)
 [![Jitpack](https://jitpack.io/v/lyze237/gdx-UnBox2D.svg)](https://jitpack.io/#lyze237/gdx-UnBox2D)
@@ -11,7 +11,7 @@ A libGDX library to couple Unity's behaviour system and execution order with lib
 
 * Unity's Game Objects and Behaviour system is a lot of fun to work with
 * This library tries to re-implement the [execution order loop](https://docs.unity3d.com/Manual/ExecutionOrder.html) and this whole Game Object and Behaviour system (start, update, ...)
-* Optionally GameObjects are also coupled with Box2D:
+* Everything is also coupled with Box2D:
   * Physics steps run at the correct time (fixedUpdate, ...)
   * All your Behaviours receive proper physics notifications (onCollisionEnter, ...)
 
@@ -27,7 +27,8 @@ public class CoolGame extends Game {
 
     private SpriteBatch batch;
 
-    private UnBox unBox;
+    private Box2DUnBox unBox;
+    private Box2DDebugRenderer debugRenderer;
 
     @Override
     public void create() {
@@ -35,19 +36,18 @@ public class CoolGame extends Game {
         viewport.getCamera().translate(-5, 0, 0);
 
         batch = new SpriteBatch();
+        debugRenderer = new Box2DDebugRenderer();
 
-        // Create an instance of the library
-        unBox = new UnBox();
-        // Alternative create a Box2D version of the library. Makes sure that Box2DGameObjects have physics.
-        unBox = new Box2DUnBox(new Vector2(0, -9), true);
+        // Create an instance of the library, with no gravity
+        unBox = new Box2DUnBox(new Vector2(0, 0), true);
 
         // Create two game objects, those get automatically added to the libraries instance
-        var rightGo = new GameObject(unBox); // Alternative new Box2DGameObject() if you want to use the physics engine with this body.
+        var rightGo = new GameObject(unBox);
         var leftGo = new GameObject(unBox);
 
         // Attach a logging behaviour to both of the game objects
-        new SoutBehaviour("Right GO", false, rightGo);
-        new SoutBehaviour("Left GO", false, leftGo);
+        new SoutBehaviour(BodyDefType.DynamicBody, "Right GO", false, rightGo);
+        new SoutBehaviour(BodyDefType.DynamicBody, "Left GO", false, leftGo);
 
         // Attach a movement behaviour to both game objects
         new MoveBehaviour(true, rightGo);
@@ -69,6 +69,9 @@ public class CoolGame extends Game {
         batch.begin();
         unbox.render(batch);
         batch.end();
+
+        // Debug render all box2d bodies
+        debugRenderer.render(unBox.getWorld(), viewport.getCamera().combined);
 
         // Clean up render loop
         unBox.postRender();
