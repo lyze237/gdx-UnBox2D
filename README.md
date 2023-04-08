@@ -46,8 +46,8 @@ public class CoolGame extends Game {
         var leftGo = new GameObject(unBox);
         
         // Attach a Box2D body
-      new Box2dBehaviour(BodyDefType.DynamicBody, rightGo);
-      new Box2dBehaviour(BodyDefType.DynamicBody, leftGo);
+        new Box2dBehaviour(BodyDefType.DynamicBody, rightGo);
+        new Box2dBehaviour(BodyDefType.DynamicBody, leftGo);
 
         // Attach a logging behaviour to both of the game objects
         new SoutBehaviour("Right GO", false, rightGo);
@@ -71,11 +71,11 @@ public class CoolGame extends Game {
 
         // Render the state
         batch.begin();
-        unbox.render(batch);
+        unBox.render(batch);
         batch.end();
 
-        // Debug render all box2d bodies
-        debugRenderer.render(unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
+        // Debug render all box2d bodies (if you are using a physics world)
+        //debugRenderer.render(unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
 
         // Clean up render loop
         unBox.postRender();
