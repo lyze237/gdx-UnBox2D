@@ -39,7 +39,7 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
     private final Array<GameObject> gameObjectsToAdd = new Array<>();
     private final Array<GameObject> gameObjectsToDestroy = new Array<>();
 
-    private final Array<Behaviour> behavioursToAdd = new Array<>();
+    final Array<Behaviour> behavioursToAdd = new Array<>();
     private final Array<Behaviour> behavioursToDestroy = new Array<>();
 
     /**
@@ -387,6 +387,10 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
      */
     public <T extends Behaviour> Array<T> findBehaviours(Class<T> behaviourClass, Array<T> tempStorage) {
         tempStorage.clear();
+
+        for (int i = 0; i < behavioursToAdd.size; i++)
+            if (behavioursToAdd.get(i).getClass().equals(behaviourClass))
+                tempStorage.add((T) behavioursToAdd.get(i));
 
         for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
             var gameObject = gameObjects.orderedKeys().get(key);

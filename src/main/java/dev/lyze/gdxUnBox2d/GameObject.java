@@ -107,9 +107,17 @@ public final class GameObject {
      */
     public <T extends Behaviour> T getBehaviour(Class<T> behaviourClass) {
         Array<Behaviour> behaviours = unBox.gameObjects.get(this);
-        for (var i = 0; i < behaviours.size; i++)
-            if (behaviours.get(i).getClass().equals(behaviourClass))
-                return (T) behaviours.get(i);
+        if (behaviours == null) {
+            for (int i = 0; i < unBox.behavioursToAdd.size; i++) {
+                var behaviour = unBox.behavioursToAdd.get(i);
+                if (behaviour.getGameObject() == this && behaviour.getClass().equals(behaviourClass))
+                    return (T) behaviour;
+            }
+        } else {
+            for (var i = 0; i < behaviours.size; i++)
+                if (behaviours.get(i).getClass().equals(behaviourClass))
+                    return (T) behaviours.get(i);
+        }
 
         return null;
     }
@@ -138,9 +146,17 @@ public final class GameObject {
         tempStorage.clear();
 
         Array<Behaviour> behaviours = unBox.gameObjects.get(this);
-        for (var i = 0; i < behaviours.size; i++)
-            if (behaviours.get(i).getClass().equals(behaviourClass))
-                tempStorage.add((T) behaviours.get(i));
+        if (behaviours == null) {
+            for (int i = 0; i < unBox.behavioursToAdd.size; i++) {
+                var behaviour = unBox.behavioursToAdd.get(i);
+                if (behaviour.getGameObject() == this && behaviour.getClass().equals(behaviourClass))
+                    tempStorage.add((T) behaviours.get(i));
+            }
+        } else {
+            for (var i = 0; i < behaviours.size; i++)
+                if (behaviours.get(i).getClass().equals(behaviourClass))
+                    tempStorage.add((T) behaviours.get(i));
+        }
 
         return tempStorage;
     }
