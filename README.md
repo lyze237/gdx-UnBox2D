@@ -74,8 +74,8 @@ public class CoolGame extends Game {
         unBox.render(batch);
         batch.end();
 
-        // Debug render all box2d bodies
-        debugRenderer.render((World) unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
+        // Debug render all box2d bodies (if you are using a physics world)
+        //debugRenderer.render(unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
 
         // Clean up render loop
         unBox.postRender();
