@@ -315,7 +315,7 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
 
             var behaviours = gameObjects.get(gameObject);
             for (int j = 0; j < behaviours.size; j++)
-                behavioursToDestroy.add(behaviours.get(j));
+                destroy(behaviours.get(i));
 
             gameObject.setState(GameObjectState.DESTROYED);
 
@@ -364,9 +364,8 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
         go.setState(GameObjectState.DESTROYING);
 
         var behaviours = gameObjects.get(go);
-        for (int i = 0; i < behaviours.size; i++) {
-            behaviours.get(i).setState(BehaviourState.DESTROYING);
-        }
+        for (int i = 0; i < behaviours.size; i++)
+            destroy(behaviours.get(i));
 
         gameObjectsToDestroy.add(go);
     }
