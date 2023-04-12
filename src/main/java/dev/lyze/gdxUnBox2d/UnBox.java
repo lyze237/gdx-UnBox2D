@@ -343,6 +343,9 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
      * @param behaviour The behaviour instance to remove.
      */
     public void destroy(Behaviour behaviour) {
+        if (behaviour.getState() == BehaviourState.DESTROYING || behaviour.getState() == BehaviourState.DESTROYED)
+            return;
+
         behaviour.setState(BehaviourState.DESTROYING);
 
         behavioursToDestroy.add(behaviour);
@@ -355,6 +358,9 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
      * @param go The behaviour instance to remove.
      */
     public void destroy(GameObject go) {
+        if (go.getState() == GameObjectState.DESTROYING || go.getState() == GameObjectState.DESTROYED)
+            return;
+
         go.setState(GameObjectState.DESTROYING);
 
         var behaviours = gameObjects.get(go);
