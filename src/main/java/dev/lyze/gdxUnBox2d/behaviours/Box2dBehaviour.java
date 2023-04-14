@@ -3,8 +3,8 @@ package dev.lyze.gdxUnBox2d.behaviours;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import dev.lyze.gdxUnBox2d.BodyDefType;
-import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.Box2dPhysicsWorld;
+import dev.lyze.gdxUnBox2d.GameObject;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,12 +29,18 @@ public class Box2dBehaviour extends BehaviourAdapter {
                 bodyDef.type = BodyDef.BodyType.DynamicBody;
                 break;
         }
+
+        if (!(gameObject.getUnBox().getPhysicsWorld() instanceof Box2dPhysicsWorld))
+            throw new IllegalArgumentException("Physics world isn't of type " + Box2dPhysicsWorld.class.getSimpleName());
     }
 
     public Box2dBehaviour(BodyDef bodyDef, GameObject gameObject) {
         super(gameObject);
 
         this.bodyDef = bodyDef;
+
+        if (!(gameObject.getUnBox().getPhysicsWorld() instanceof Box2dPhysicsWorld))
+            throw new IllegalArgumentException("Physics world isn't of type " + Box2dPhysicsWorld.class.getSimpleName());
     }
 
     @Override

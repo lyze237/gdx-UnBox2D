@@ -18,7 +18,7 @@ import lombok.var;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
-public class MoveTest extends LibgdxLwjglUnitTest {
+public class Box2dMoveTest extends LibgdxLwjglUnitTest {
     private Viewport viewport;
 
     private UnBox<Box2dPhysicsWorld> unBox;
@@ -46,8 +46,8 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         new SoutBehaviour("Right GO", false, rightGo);
         new SoutBehaviour("Left GO", false, leftGo);
 
-        new MoveBehaviour(true, rightGo);
-        new MoveBehaviour(false, leftGo);
+        new Box2dMoveBehaviour(true, rightGo);
+        new Box2dMoveBehaviour(false, leftGo);
     }
 
     @Override
