@@ -1,6 +1,6 @@
 # gdx-UnBox2D (Unity Box2D)
 
-A libGDX library to couple Unity's behaviour system and execution order with Box2D.
+A libGDX library to couple Unity's behaviour system and execution order with [Box2D](https://box2d.org/) (and also [Dyn4j](https://dyn4j.org/)).
 
 [![License](https://img.shields.io/github/license/lyze237/gdx-UnBox2D)](https://github.com/lyze237/gdx-UnBox2D/blob/main/LICENSE)
 [![Jitpack](https://jitpack.io/v/lyze237/gdx-UnBox2D.svg)](https://jitpack.io/#lyze237/gdx-UnBox2D)
@@ -74,7 +74,7 @@ public class CoolGame extends Game {
         unBox.render(batch);
         batch.end();
 
-        // Debug render all box2d bodies (if you are using a physics world)
+        // Debug render all Box2d bodies (if you are using a physics world)
         //debugRenderer.render(unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
 
         // Clean up render loop
