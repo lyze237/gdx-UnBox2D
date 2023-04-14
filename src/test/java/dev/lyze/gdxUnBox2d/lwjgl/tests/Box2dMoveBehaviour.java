@@ -7,10 +7,10 @@ import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import lombok.var;
 
-public class MoveBehaviour extends BehaviourAdapter {
+public class Box2dMoveBehaviour extends BehaviourAdapter {
     private final boolean right;
 
-    public MoveBehaviour(boolean right, GameObject gameObject) {
+    public Box2dMoveBehaviour(boolean right, GameObject gameObject) {
         super(gameObject);
 
         this.right = right;

@@ -10,6 +10,8 @@ import dev.lyze.gdxUnBox2d.Behaviour;
 import dev.lyze.gdxUnBox2d.GameObject;
 import lombok.Getter;
 import lombok.Setter;
+import org.dyn4j.dynamics.PhysicsBody;
+import org.dyn4j.world.ContactCollisionData;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class SoutBehaviour extends Behaviour {
@@ -52,33 +54,69 @@ public class SoutBehaviour extends Behaviour {
     }
 
     @Override
-    public boolean onCollisionPreSolve(Behaviour other, Contact contact, Manifold oldManifold) {
+    public boolean onBox2dCollisionPreSolve(Behaviour other, Contact contact, Manifold oldManifold) {
         if (logUpdates)
-            Gdx.app.log(name, "onCollisionPreSolve");
+            Gdx.app.log(name, "onBox2dCollisionPreSolve");
         return false;
     }
 
     @Override
-    public boolean onCollisionPostSolve(Behaviour other, Contact contact, ContactImpulse impulse) {
+    public boolean onDyn4jCollisionPreSolve(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
         if (logUpdates)
-            Gdx.app.log(name, "onCollisionPostSolve");
+            Gdx.app.log(name, "onDyn4jCollisionPreSolve");
         return false;
     }
 
     @Override
-    public void onCollisionEnter(Behaviour other, Contact contact) {
-        Gdx.app.log(name, "onCollisionEnter");
-    }
-
-    @Override
-    public void onCollisionStay(Behaviour other) {
+    public boolean onBox2dCollisionPostSolve(Behaviour other, Contact contact, ContactImpulse impulse) {
         if (logUpdates)
-            Gdx.app.log(name, "onCollisionStay");
+            Gdx.app.log(name, "onBox2dCollisionPostSolve");
+        return false;
     }
 
     @Override
-    public void onCollisionExit(Behaviour other, Contact contact) {
-        Gdx.app.log(name, "onCollisionExit");
+    public boolean onDyn4jCollisionPostSolve(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
+        if (logUpdates)
+            Gdx.app.log(name, "onDyn4jCollisionPostSolve");
+        return false;
+    }
+
+    @Override
+    public void onBox2dCollisionEnter(Behaviour other, Contact contact) {
+        Gdx.app.log(name, "onBox2dCollisionEnter");
+    }
+
+    @Override
+    public void onDyn4jCollisionEnter(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
+        Gdx.app.log(name, "onDyn4jCollisionEnter");
+    }
+
+    @Override
+    public void onBox2dCollisionStay(Behaviour other) {
+        if (logUpdates)
+            Gdx.app.log(name, "onBox2dCollisionStay");
+    }
+
+    @Override
+    public void onDyn4jCollisionStay(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact oldContact, org.dyn4j.dynamics.contact.Contact newContact) {
+        if (logUpdates)
+            Gdx.app.log(name, "onDyn4jCollisionStay");
+    }
+
+    @Override
+    public void onBox2dCollisionExit(Behaviour other, Contact contact) {
+        Gdx.app.log(name, "onBox2dCollisionExit");
+    }
+
+    @Override
+    public void onDyn4jCollisionExit(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
+        Gdx.app.log(name, "onDyn4jCollisionExit");
+    }
+
+    @Override
+    public void onDyn4jCollision(Behaviour other, ContactCollisionData<PhysicsBody> collision) {
+        if (logUpdates)
+            Gdx.app.log(name, "onDyn4jCollision");
     }
 
     @Override

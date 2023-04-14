@@ -28,7 +28,9 @@ repositories {
 
 dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
     implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    implementation "com.github.lyze237:gdx-Dyn4j:$gdxDyn4jVersion"
 
     implementation "space.earlygrey:shapedrawer:$shapeDrawerVersion"
 
