@@ -12,7 +12,7 @@ import lombok.Getter;
 /**
  * Creates a box fixture in awake.
  */
-public abstract class CreateFixtureBehaviour extends BehaviourAdapter {
+public abstract class CreateBox2dFixtureBehaviour extends BehaviourAdapter {
     @Getter private Fixture fixture;
     @Getter(AccessLevel.PROTECTED) private final FixtureDef fixtureDef;
 
@@ -21,7 +21,7 @@ public abstract class CreateFixtureBehaviour extends BehaviourAdapter {
      * 
      * @param gameObject The game object to attach to.
      */
-    public CreateFixtureBehaviour(GameObject gameObject) {
+    public CreateBox2dFixtureBehaviour(GameObject gameObject) {
         this(new FixtureDef(), gameObject);
     }
 
@@ -31,7 +31,7 @@ public abstract class CreateFixtureBehaviour extends BehaviourAdapter {
      * @param fixtureDef The fixture definition to use as template.
      * @param gameObject The game object to attach to.
      */
-    public CreateFixtureBehaviour(FixtureDef fixtureDef, GameObject gameObject) {
+    public CreateBox2dFixtureBehaviour(FixtureDef fixtureDef, GameObject gameObject) {
         super(gameObject);
 
         this.fixtureDef = fixtureDef;

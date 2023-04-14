@@ -10,7 +10,7 @@ import lombok.Getter;
 /**
  * Creates a box fixture in awake with the provided parameters.
  */
-public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
+public class CreateBox2dBoxFixtureBehaviour extends CreateBox2dFixtureBehaviour {
     private final PolygonShape shape;
 
     @Getter private Fixture fixture;
@@ -22,7 +22,7 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
      * @param hy         The half height
      * @param gameObject The game object to attach to.
      */
-    public CreateBoxFixtureBehaviour(float hx, float hy, GameObject gameObject) {
+    public CreateBox2dBoxFixtureBehaviour(float hx, float hy, GameObject gameObject) {
         this(hx, hy, Vector2.Zero, gameObject);
     }
 
@@ -34,7 +34,7 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
      * @param position   The center of the box
      * @param gameObject The game object to attach to.
      */
-    public CreateBoxFixtureBehaviour(float hx, float hy, Vector2 position, GameObject gameObject) {
+    public CreateBox2dBoxFixtureBehaviour(float hx, float hy, Vector2 position, GameObject gameObject) {
         this(hx, hy, position, new FixtureDef(), gameObject);
     }
 
@@ -47,8 +47,8 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
      * @param fixtureDef The fixture definition to use as template.
      * @param gameObject The game object to attach to.
      */
-    public CreateBoxFixtureBehaviour(float hx, float hy, Vector2 position, FixtureDef fixtureDef,
-            GameObject gameObject) {
+    public CreateBox2dBoxFixtureBehaviour(float hx, float hy, Vector2 position, FixtureDef fixtureDef,
+                                          GameObject gameObject) {
         super(fixtureDef, gameObject);
 
         shape = new PolygonShape();

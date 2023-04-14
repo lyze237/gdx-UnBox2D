@@ -8,7 +8,7 @@ import dev.lyze.gdxUnBox2d.GameObject;
 /**
  * Creates a circle fixture in awake with the provided parameters.
  */
-public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
+public class CreateBox2dCircleFixtureBehaviour extends CreateBox2dFixtureBehaviour {
     private final CircleShape shape;
 
     /**
@@ -17,7 +17,7 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
      * @param radius     The radius of the circle.
      * @param gameObject The game object to attach to.
      */
-    public CreateCircleFixtureBehaviour(float radius, GameObject gameObject) {
+    public CreateBox2dCircleFixtureBehaviour(float radius, GameObject gameObject) {
         this(Vector2.Zero, radius, gameObject);
     }
 
@@ -28,7 +28,7 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
      * @param radius     The radius of the circle.
      * @param gameObject The game object to attach to.
      */
-    public CreateCircleFixtureBehaviour(Vector2 position, float radius, GameObject gameObject) {
+    public CreateBox2dCircleFixtureBehaviour(Vector2 position, float radius, GameObject gameObject) {
         this(position, radius, new FixtureDef(), gameObject);
     }
 
@@ -40,7 +40,7 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
      * @param fixtureDef The fixture definition to use as template.
      * @param gameObject The game object to attach to.
      */
-    public CreateCircleFixtureBehaviour(Vector2 position, float radius, FixtureDef fixtureDef, GameObject gameObject) {
+    public CreateBox2dCircleFixtureBehaviour(Vector2 position, float radius, FixtureDef fixtureDef, GameObject gameObject) {
         super(fixtureDef, gameObject);
 
         shape = new CircleShape();
