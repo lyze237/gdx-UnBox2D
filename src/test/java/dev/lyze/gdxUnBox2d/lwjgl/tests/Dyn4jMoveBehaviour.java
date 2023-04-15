@@ -4,9 +4,9 @@ import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.Dyn4jBehaviour;
 import lombok.var;
+import org.dyn4j.geometry.DynVector2;
 import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Vector2;
 
 public class Dyn4jMoveBehaviour extends BehaviourAdapter {
     private final boolean right;
@@ -32,6 +32,6 @@ public class Dyn4jMoveBehaviour extends BehaviourAdapter {
         if (right && position.x < -8)
             return;
 
-        getGameObject().getBehaviour(Dyn4jBehaviour.class).getBody().applyImpulse(new Vector2(0.1f * (right ? -1 : -0.2f), 0));
+        getGameObject().getBehaviour(Dyn4jBehaviour.class).getBody().applyImpulse(new DynVector2(0.1f * (right ? -1 : -0.2f), 0));
     }
 }

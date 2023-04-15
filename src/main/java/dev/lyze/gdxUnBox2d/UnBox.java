@@ -192,6 +192,9 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
             physicsWorld.step(timeStep);
             accumulator -= timeStep;
         }
+
+        if (options.isInterpolateMovement())
+            physicsWorld.interpolateMovement(accumulator);
     }
 
     private void updateFixedObjects() {
