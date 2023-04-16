@@ -48,7 +48,7 @@ public class CreateBox2dBoxFixtureBehaviour extends CreateBox2dFixtureBehaviour 
      * @param gameObject The game object to attach to.
      */
     public CreateBox2dBoxFixtureBehaviour(float hx, float hy, Vector2 position, FixtureDef fixtureDef,
-                                          GameObject gameObject) {
+            GameObject gameObject) {
         super(fixtureDef, gameObject);
 
         shape = new PolygonShape();

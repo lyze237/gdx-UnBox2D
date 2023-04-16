@@ -32,7 +32,8 @@ public class Box2dBehaviour extends BehaviourAdapter {
         }
 
         if (!(gameObject.getUnBox().getPhysicsWorld() instanceof Box2dPhysicsWorld))
-            throw new IllegalArgumentException("Physics world isn't of type " + Box2dPhysicsWorld.class.getSimpleName());
+            throw new IllegalArgumentException(
+                    "Physics world isn't of type " + Box2dPhysicsWorld.class.getSimpleName());
     }
 
     public Box2dBehaviour(BodyDef bodyDef, GameObject gameObject) {
@@ -41,7 +42,8 @@ public class Box2dBehaviour extends BehaviourAdapter {
         this.bodyDef = bodyDef;
 
         if (!(gameObject.getUnBox().getPhysicsWorld() instanceof Box2dPhysicsWorld))
-            throw new IllegalArgumentException("Physics world isn't of type " + Box2dPhysicsWorld.class.getSimpleName());
+            throw new IllegalArgumentException(
+                    "Physics world isn't of type " + Box2dPhysicsWorld.class.getSimpleName());
     }
 
     @Override

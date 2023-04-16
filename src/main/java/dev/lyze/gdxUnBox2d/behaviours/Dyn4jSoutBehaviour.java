@@ -52,32 +52,37 @@ public class Dyn4jSoutBehaviour extends Behaviour implements IDyn4jBehaviourEven
     }
 
     @Override
-    public boolean onCollisionPreSolve(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
+    public boolean onCollisionPreSolve(Behaviour other, ContactCollisionData<PhysicsBody> collision,
+            org.dyn4j.dynamics.contact.Contact contact) {
         if (logUpdates)
             Gdx.app.log(name, "onDyn4jCollisionPreSolve");
         return false;
     }
 
     @Override
-    public boolean onCollisionPostSolve(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
+    public boolean onCollisionPostSolve(Behaviour other, ContactCollisionData<PhysicsBody> collision,
+            org.dyn4j.dynamics.contact.Contact contact) {
         if (logUpdates)
             Gdx.app.log(name, "onDyn4jCollisionPostSolve");
         return false;
     }
 
     @Override
-    public void onCollisionEnter(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
+    public void onCollisionEnter(Behaviour other, ContactCollisionData<PhysicsBody> collision,
+            org.dyn4j.dynamics.contact.Contact contact) {
         Gdx.app.log(name, "onDyn4jCollisionEnter");
     }
 
     @Override
-    public void onCollisionStay(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact oldContact, org.dyn4j.dynamics.contact.Contact newContact) {
+    public void onCollisionStay(Behaviour other, ContactCollisionData<PhysicsBody> collision,
+            org.dyn4j.dynamics.contact.Contact oldContact, org.dyn4j.dynamics.contact.Contact newContact) {
         if (logUpdates)
             Gdx.app.log(name, "onDyn4jCollisionStay");
     }
 
     @Override
-    public void onCollisionExit(Behaviour other, ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact contact) {
+    public void onCollisionExit(Behaviour other, ContactCollisionData<PhysicsBody> collision,
+            org.dyn4j.dynamics.contact.Contact contact) {
         Gdx.app.log(name, "onDyn4jCollisionExit");
     }
 

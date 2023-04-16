@@ -11,8 +11,7 @@ import lombok.Getter;
 import lombok.var;
 
 public class Box2dPhysicsWorld extends PhysicsWorld<World, Body, BodyDef> {
-    @Getter
-    private final Box2dPhysicsOptions options = new Box2dPhysicsOptions();
+    @Getter private final Box2dPhysicsOptions options = new Box2dPhysicsOptions();
     private final OrderedMap<Body, Box2dBehaviour> bodyReferences = new OrderedMap<>();
 
     private final Box2dWorldContactListener contactListener;
