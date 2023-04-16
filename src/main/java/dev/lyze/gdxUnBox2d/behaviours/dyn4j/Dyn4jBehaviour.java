@@ -15,7 +15,8 @@ public class Dyn4jBehaviour extends BehaviourAdapter {
         super(gameObject);
 
         if (!(gameObject.getUnBox().getPhysicsWorld() instanceof Dyn4jPhysicsWorld))
-            throw new IllegalArgumentException("Physics world isn't of type " + Dyn4jPhysicsWorld.class.getSimpleName());
+            throw new IllegalArgumentException(
+                    "Physics world isn't of type " + Dyn4jPhysicsWorld.class.getSimpleName());
 
         this.body = body;
     }

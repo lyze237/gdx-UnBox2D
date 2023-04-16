@@ -40,7 +40,8 @@ public class CreateBox2dCircleFixtureBehaviour extends CreateBox2dFixtureBehavio
      * @param fixtureDef The fixture definition to use as template.
      * @param gameObject The game object to attach to.
      */
-    public CreateBox2dCircleFixtureBehaviour(Vector2 position, float radius, FixtureDef fixtureDef, GameObject gameObject) {
+    public CreateBox2dCircleFixtureBehaviour(Vector2 position, float radius, FixtureDef fixtureDef,
+            GameObject gameObject) {
         super(fixtureDef, gameObject);
 
         shape = new CircleShape();

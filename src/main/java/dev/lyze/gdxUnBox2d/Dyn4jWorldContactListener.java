@@ -68,7 +68,8 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
     }
 
     @Override
-    public void persist(ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact oldContact, org.dyn4j.dynamics.contact.Contact newContact) {
+    public void persist(ContactCollisionData<PhysicsBody> collision, org.dyn4j.dynamics.contact.Contact oldContact,
+            org.dyn4j.dynamics.contact.Contact newContact) {
         var a = world.findBehaviour(collision.getBody1());
         var b = world.findBehaviour(collision.getBody2());
 
@@ -151,4 +152,3 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
         }
     }
 }
-

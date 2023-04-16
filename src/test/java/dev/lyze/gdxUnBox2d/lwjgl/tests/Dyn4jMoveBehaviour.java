@@ -32,6 +32,7 @@ public class Dyn4jMoveBehaviour extends BehaviourAdapter {
         if (right && position.x < -8)
             return;
 
-        getGameObject().getBehaviour(Dyn4jBehaviour.class).getBody().applyImpulse(new DynVector2(0.1f * (right ? -1 : -0.2f), 0));
+        getGameObject().getBehaviour(Dyn4jBehaviour.class).getBody()
+                .applyImpulse(new DynVector2(0.1f * (right ? -1 : -0.2f), 0));
     }
 }

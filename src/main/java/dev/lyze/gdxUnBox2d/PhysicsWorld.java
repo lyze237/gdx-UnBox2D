@@ -18,5 +18,6 @@ public abstract class PhysicsWorld<TWorld, TObject, TObjectToAdd> {
 
     public abstract void step(float timeStep);
 
-    public void interpolateMovement(float accumulator) { }
+    public void interpolateMovement(float accumulator) {
+    }
 }

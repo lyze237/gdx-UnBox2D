@@ -36,6 +36,7 @@ public class Box2dMoveBehaviour extends BehaviourAdapter {
         if (right && position.x < -8)
             return;
 
-        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0, position.x, position.y, true);
+        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0,
+                position.x, position.y, true);
     }
 }

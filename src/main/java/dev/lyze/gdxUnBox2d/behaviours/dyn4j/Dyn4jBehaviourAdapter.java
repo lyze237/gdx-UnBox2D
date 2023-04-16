@@ -85,7 +85,8 @@ public class Dyn4jBehaviourAdapter extends Behaviour implements IDyn4jBehaviourE
     }
 
     @Override
-    public void onCollisionStay(Behaviour other, ContactCollisionData<PhysicsBody> collision, Contact oldContact, Contact newContact) {
+    public void onCollisionStay(Behaviour other, ContactCollisionData<PhysicsBody> collision, Contact oldContact,
+            Contact newContact) {
 
     }
 

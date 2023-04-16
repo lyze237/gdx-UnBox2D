@@ -44,7 +44,7 @@ public class CoolGame extends Game {
         // Create two game objects, those get automatically added to the libraries instance
         var rightGo = new GameObject(unBox);
         var leftGo = new GameObject(unBox);
-        
+
         // Attach a Box2D body
         new Box2dBehaviour(BodyDefType.DynamicBody, rightGo);
         new Box2dBehaviour(BodyDefType.DynamicBody, leftGo);

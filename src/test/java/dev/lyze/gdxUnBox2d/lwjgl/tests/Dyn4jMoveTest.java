@@ -69,7 +69,8 @@ public class Dyn4jMoveTest extends LibgdxLwjglUnitTest {
         renderer.begin(ShapeRenderer.ShapeType.Line);
         for (PhysicsBody body : unBox.getPhysicsWorld().getWorld().getBodies()) {
             var aabb = body.createAABB();
-            renderer.rect((float) aabb.getMinX(), (float) aabb.getMinY(), (float) aabb.getWidth(), (float) aabb.getHeight());
+            renderer.rect((float) aabb.getMinX(), (float) aabb.getMinY(), (float) aabb.getWidth(),
+                    (float) aabb.getHeight());
         }
         renderer.end();
 
