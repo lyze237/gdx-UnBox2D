@@ -2,7 +2,7 @@ package dev.lyze.gdxUnBox2d.lwjgl.tests;
 
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
-import dev.lyze.gdxUnBox2d.behaviours.Dyn4jBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.dyn4j.Dyn4jBehaviour;
 import lombok.var;
 import org.dyn4j.geometry.DynVector2;
 import org.dyn4j.geometry.Geometry;

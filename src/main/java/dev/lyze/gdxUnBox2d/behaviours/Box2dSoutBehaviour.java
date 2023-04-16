@@ -3,17 +3,21 @@ package dev.lyze.gdxUnBox2d.behaviours;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import dev.lyze.gdxUnBox2d.Behaviour;
 import dev.lyze.gdxUnBox2d.GameObject;
+import dev.lyze.gdxUnBox2d.behaviours.box2d.IBox2dBehaviourEvents;
 import lombok.Getter;
 import lombok.Setter;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-public class SoutBehaviour extends Behaviour {
+public class Box2dSoutBehaviour extends Behaviour implements IBox2dBehaviourEvents {
     @Getter @Setter private boolean logUpdates;
     @Getter @Setter private String name;
 
-    public SoutBehaviour(String name, boolean logContinuousElements, GameObject gameObject) {
+    public Box2dSoutBehaviour(String name, boolean logContinuousElements, GameObject gameObject) {
         super(gameObject);
 
         this.name = name;
@@ -46,6 +50,36 @@ public class SoutBehaviour extends Behaviour {
     public void lateUpdate(float delta) {
         if (logUpdates)
             Gdx.app.log(name, "lateUpdate");
+    }
+
+    @Override
+    public boolean onCollisionPreSolve(Behaviour other, Contact contact, Manifold oldManifold) {
+        if (logUpdates)
+            Gdx.app.log(name, "onBox2dCollisionPreSolve");
+        return false;
+    }
+
+    @Override
+    public boolean onCollisionPostSolve(Behaviour other, Contact contact, ContactImpulse impulse) {
+        if (logUpdates)
+            Gdx.app.log(name, "onBox2dCollisionPostSolve");
+        return false;
+    }
+
+    @Override
+    public void onCollisionEnter(Behaviour other, Contact contact) {
+        Gdx.app.log(name, "onBox2dCollisionEnter");
+    }
+
+    @Override
+    public void onCollisionStay(Behaviour other) {
+        if (logUpdates)
+            Gdx.app.log(name, "onBox2dCollisionStay");
+    }
+
+    @Override
+    public void onCollisionExit(Behaviour other, Contact contact) {
+        Gdx.app.log(name, "onBox2dCollisionExit");
     }
 
     @Override

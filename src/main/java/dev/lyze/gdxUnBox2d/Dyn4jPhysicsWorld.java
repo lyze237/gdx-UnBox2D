@@ -1,7 +1,7 @@
 package dev.lyze.gdxUnBox2d;
 
 import com.badlogic.gdx.utils.OrderedMap;
-import dev.lyze.gdxUnBox2d.behaviours.Dyn4jBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.dyn4j.Dyn4jBehaviour;
 import lombok.var;
 import org.dyn4j.dynamics.PhysicsBody;
 import org.dyn4j.world.World;

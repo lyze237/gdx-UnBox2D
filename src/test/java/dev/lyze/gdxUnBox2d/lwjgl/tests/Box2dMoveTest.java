@@ -8,12 +8,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.lyze.gdxUnBox2d.BodyDefType;
+import dev.lyze.gdxUnBox2d.Box2dPhysicsWorld;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
-import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
-import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.Box2dSoutBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.box2d.Box2dBehaviour;
 import dev.lyze.gdxUnBox2d.lwjgl.LibgdxLwjglUnitTest;
-import dev.lyze.gdxUnBox2d.Box2dPhysicsWorld;
 import lombok.var;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -43,8 +43,8 @@ public class Box2dMoveTest extends LibgdxLwjglUnitTest {
         var leftGo = new GameObject(unBox);
         new Box2dBehaviour(BodyDefType.DynamicBody, leftGo);
 
-        new SoutBehaviour("Right GO", false, rightGo);
-        new SoutBehaviour("Left GO", false, leftGo);
+        new Box2dSoutBehaviour("Right GO", false, rightGo);
+        new Box2dSoutBehaviour("Left GO", false, leftGo);
 
         new Box2dMoveBehaviour(true, rightGo);
         new Box2dMoveBehaviour(false, leftGo);

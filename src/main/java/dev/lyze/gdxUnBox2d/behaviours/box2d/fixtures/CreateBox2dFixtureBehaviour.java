@@ -1,11 +1,11 @@
-package dev.lyze.gdxUnBox2d.behaviours.fixtures;
+package dev.lyze.gdxUnBox2d.behaviours.box2d.fixtures;
 
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
-import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.box2d.Box2dBehaviour;
 import lombok.AccessLevel;
 import lombok.Getter;
 
