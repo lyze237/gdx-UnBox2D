@@ -1,7 +1,8 @@
-package dev.lyze.gdxUnBox2d.behaviours;
+package dev.lyze.gdxUnBox2d.behaviours.dyn4j;
 
 import dev.lyze.gdxUnBox2d.Dyn4jPhysicsWorld;
 import dev.lyze.gdxUnBox2d.GameObject;
+import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

@@ -3,7 +3,8 @@ package dev.lyze.gdxUnBox2d;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.box2d.Box2dBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.box2d.IBox2dBehaviourEvents;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.var;
@@ -29,12 +30,18 @@ public class Box2dWorldContactListener implements ContactListener {
         var b = world.findBehaviour(contact.getFixtureB().getBody());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            aBehaviours.get(i).onBox2dCollisionEnter(b, contact);
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IBox2dBehaviourEvents)
+                ((IBox2dBehaviourEvents) behaviour).onCollisionEnter(b, contact);
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            bBehaviours.get(i).onBox2dCollisionEnter(a, contact);
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IBox2dBehaviourEvents)
+                ((IBox2dBehaviourEvents) behaviour).onCollisionEnter(a, contact);
+        }
 
         collidingEntities.add(collidingEntitiesPool.obtain().set((Box2dBehaviour) a, (Box2dBehaviour) b));
     }
@@ -47,16 +54,22 @@ public class Box2dWorldContactListener implements ContactListener {
         if (a != null) {
             var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
             if (aBehaviours != null) {
-                for (int i = 0; i < aBehaviours.size; i++)
-                    aBehaviours.get(i).onBox2dCollisionExit(b, contact);
+                for (int i = 0; i < aBehaviours.size; i++) {
+                    var behaviour = aBehaviours.get(i);
+                    if (behaviour instanceof IBox2dBehaviourEvents)
+                        ((IBox2dBehaviourEvents) behaviour).onCollisionExit(b, contact);
+                }
             }
         }
 
         if (b != null) {
             var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
             if (bBehaviours != null) {
-                for (int i = 0; i < bBehaviours.size; i++)
-                    bBehaviours.get(i).onBox2dCollisionExit(a, contact);
+                for (int i = 0; i < bBehaviours.size; i++) {
+                    var behaviour = bBehaviours.get(i);
+                    if (behaviour instanceof IBox2dBehaviourEvents)
+                        ((IBox2dBehaviourEvents) behaviour).onCollisionExit(a, contact);
+                }
             }
         }
 
@@ -73,12 +86,18 @@ public class Box2dWorldContactListener implements ContactListener {
             var collidingEntity = collidingEntities.get(i);
 
             var aBehaviours = world.getUnBox().gameObjects.get(collidingEntity.getA().getGameObject());
-            for (int j = 0; j < aBehaviours.size; j++)
-                aBehaviours.get(j).onBox2dCollisionStay(collidingEntity.getB());
+            for (int j = 0; j < aBehaviours.size; j++) {
+                var behaviour = aBehaviours.get(j);
+                if (behaviour instanceof IBox2dBehaviourEvents)
+                    ((IBox2dBehaviourEvents) behaviour).onCollisionStay(collidingEntity.getB());
+            }
 
             var bBehaviours = world.getUnBox().gameObjects.get(collidingEntity.getB().getGameObject());
-            for (int j = 0; j < bBehaviours.size; j++)
-                bBehaviours.get(j).onBox2dCollisionStay(collidingEntity.getA());
+            for (int j = 0; j < bBehaviours.size; j++) {
+                var behaviour = bBehaviours.get(j);
+                if (behaviour instanceof IBox2dBehaviourEvents)
+                    ((IBox2dBehaviourEvents) behaviour).onCollisionStay(collidingEntity.getA());
+            }
         }
     }
 
@@ -88,14 +107,20 @@ public class Box2dWorldContactListener implements ContactListener {
         var b = world.findBehaviour(contact.getFixtureB().getBody());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            if (aBehaviours.get(i).onBox2dCollisionPreSolve(b, contact, oldManifold))
-                break;
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IBox2dBehaviourEvents)
+                if (((IBox2dBehaviourEvents) behaviour).onCollisionPreSolve(b, contact, oldManifold))
+                    break;
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            if (bBehaviours.get(i).onBox2dCollisionPreSolve(a, contact, oldManifold))
-                break;
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IBox2dBehaviourEvents)
+                if (((IBox2dBehaviourEvents) behaviour).onCollisionPreSolve(a, contact, oldManifold))
+                    break;
+        }
     }
 
     @Override
@@ -104,14 +129,20 @@ public class Box2dWorldContactListener implements ContactListener {
         var b = world.findBehaviour(contact.getFixtureB().getBody());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            if (aBehaviours.get(i).onBox2dCollisionPostSolve(b, contact, impulse))
-                break;
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IBox2dBehaviourEvents)
+                if (((IBox2dBehaviourEvents) behaviour).onCollisionPostSolve(b, contact, impulse))
+                    break;
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            if (bBehaviours.get(i).onBox2dCollisionPostSolve(a, contact, impulse))
-                break;
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IBox2dBehaviourEvents)
+                if (((IBox2dBehaviourEvents) behaviour).onCollisionPostSolve(a, contact, impulse))
+                    break;
+        }
     }
 
     void destroy(Box2dBehaviour behaviour) {

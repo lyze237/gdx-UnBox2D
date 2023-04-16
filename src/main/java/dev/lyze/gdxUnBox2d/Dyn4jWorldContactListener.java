@@ -1,5 +1,6 @@
 package dev.lyze.gdxUnBox2d;
 
+import dev.lyze.gdxUnBox2d.behaviours.dyn4j.IDyn4jBehaviourEvents;
 import lombok.var;
 import org.dyn4j.dynamics.PhysicsBody;
 import org.dyn4j.dynamics.contact.SolvedContact;
@@ -19,12 +20,18 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
         var b = world.findBehaviour(collision.getBody2());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            aBehaviours.get(i).onDyn4jCollisionEnter(b, collision, contact);
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                ((IDyn4jBehaviourEvents) behaviour).onCollisionEnter(b, collision, contact);
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            bBehaviours.get(i).onDyn4jCollisionEnter(a, collision, contact);
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                ((IDyn4jBehaviourEvents) behaviour).onCollisionEnter(a, collision, contact);
+        }
     }
 
     @Override
@@ -35,16 +42,22 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
         if (a != null) {
             var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
             if (aBehaviours != null) {
-                for (int i = 0; i < aBehaviours.size; i++)
-                    aBehaviours.get(i).onDyn4jCollisionExit(b, collision, contact);
+                for (int i = 0; i < aBehaviours.size; i++) {
+                    var behaviour = aBehaviours.get(i);
+                    if (behaviour instanceof IDyn4jBehaviourEvents)
+                        ((IDyn4jBehaviourEvents) behaviour).onCollisionExit(b, collision, contact);
+                }
             }
         }
 
         if (b != null) {
             var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
             if (bBehaviours != null) {
-                for (int i = 0; i < bBehaviours.size; i++)
-                    bBehaviours.get(i).onDyn4jCollisionExit(a, collision, contact);
+                for (int i = 0; i < bBehaviours.size; i++) {
+                    var behaviour = bBehaviours.get(i);
+                    if (behaviour instanceof IDyn4jBehaviourEvents)
+                        ((IDyn4jBehaviourEvents) behaviour).onCollisionExit(a, collision, contact);
+                }
             }
         }
     }
@@ -60,12 +73,18 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
         var b = world.findBehaviour(collision.getBody2());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            aBehaviours.get(i).onDyn4jCollisionStay(b, collision, oldContact, newContact);
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                ((IDyn4jBehaviourEvents) behaviour).onCollisionStay(b, collision, oldContact, newContact);
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            bBehaviours.get(i).onDyn4jCollisionStay(a, collision, oldContact, newContact);
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                ((IDyn4jBehaviourEvents) behaviour).onCollisionStay(a, collision, oldContact, newContact);
+        }
     }
 
     @Override
@@ -74,12 +93,18 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
         var b = world.findBehaviour(collision.getBody2());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            aBehaviours.get(i).onDyn4jCollision(b, collision);
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                ((IDyn4jBehaviourEvents) behaviour).onCollision(b, collision);
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            bBehaviours.get(i).onDyn4jCollision(a, collision);
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                ((IDyn4jBehaviourEvents) behaviour).onCollision(a, collision);
+        }
     }
 
     @Override
@@ -88,14 +113,20 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
         var b = world.findBehaviour(collision.getBody2());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            if (aBehaviours.get(i).onDyn4jCollisionPreSolve(b, collision, contact))
-                break;
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                if (((IDyn4jBehaviourEvents) behaviour).onCollisionPreSolve(b, collision, contact))
+                    break;
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            if (bBehaviours.get(i).onDyn4jCollisionPreSolve(a, collision, contact))
-                break;
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                if (((IDyn4jBehaviourEvents) behaviour).onCollisionPreSolve(a, collision, contact))
+                    break;
+        }
     }
 
     @Override
@@ -104,14 +135,20 @@ public class Dyn4jWorldContactListener extends ContactListenerAdapter<PhysicsBod
         var b = world.findBehaviour(collision.getBody2());
 
         var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
-        for (int i = 0; i < aBehaviours.size; i++)
-            if (aBehaviours.get(i).onDyn4jCollisionPostSolve(b, collision, contact))
-                break;
+        for (int i = 0; i < aBehaviours.size; i++) {
+            var behaviour = aBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                if (((IDyn4jBehaviourEvents) behaviour).onCollisionPostSolve(b, collision, contact))
+                    break;
+        }
 
         var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
-        for (int i = 0; i < bBehaviours.size; i++)
-            if (bBehaviours.get(i).onDyn4jCollisionPostSolve(a, collision, contact))
-                break;
+        for (int i = 0; i < bBehaviours.size; i++) {
+            var behaviour = bBehaviours.get(i);
+            if (behaviour instanceof IDyn4jBehaviourEvents)
+                if (((IDyn4jBehaviourEvents) behaviour).onCollisionPostSolve(a, collision, contact))
+                    break;
+        }
     }
 }
 

@@ -1,10 +1,11 @@
-package dev.lyze.gdxUnBox2d.behaviours;
+package dev.lyze.gdxUnBox2d.behaviours.box2d;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import dev.lyze.gdxUnBox2d.BodyDefType;
 import dev.lyze.gdxUnBox2d.Box2dPhysicsWorld;
 import dev.lyze.gdxUnBox2d.GameObject;
+import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

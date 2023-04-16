@@ -8,8 +8,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.lyze.gdxUnBox2d.Dyn4jPhysicsWorld;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
-import dev.lyze.gdxUnBox2d.behaviours.Dyn4jBehaviour;
-import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.Dyn4jSoutBehaviour;
+import dev.lyze.gdxUnBox2d.behaviours.dyn4j.Dyn4jBehaviour;
 import dev.lyze.gdxUnBox2d.lwjgl.LibgdxLwjglUnitTest;
 import lombok.var;
 import org.dyn4j.dynamics.Body;
@@ -49,8 +49,8 @@ public class Dyn4jMoveTest extends LibgdxLwjglUnitTest {
         Body leftBody = new Body();
         new Dyn4jBehaviour(leftBody, leftGo);
 
-        new SoutBehaviour("Right GO", false, rightGo);
-        new SoutBehaviour("Left GO", false, leftGo);
+        new Dyn4jSoutBehaviour("Right GO", false, rightGo);
+        new Dyn4jSoutBehaviour("Left GO", false, leftGo);
 
         new Dyn4jMoveBehaviour(true, rightGo);
         new Dyn4jMoveBehaviour(false, leftGo);
