@@ -6,6 +6,9 @@ task delombokedSourcesJars(type: Jar, dependsOn: classes) {
     from('src/main/resources') {
         include '**/*'
     }
+    from {
+        configurations.sourceLibsTransitive.collect { it.isDirectory() ? it : zipTree(it) }
+    }
     archiveClassifier.set("sources")
 }
 
@@ -16,6 +19,17 @@ javadoc {
 
 java {
     withJavadocJar()
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.xmlLibs.collect {
+            it.isDirectory() ? it : zipTree(it).matching {
+                include "**/*.gwt.xml"
+            }
+        }
+    }
 }
 
 publishing {

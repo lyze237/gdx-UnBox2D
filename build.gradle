@@ -26,13 +26,35 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
+configurations {
+    sourceLibsTransitive
+    sourceLibsTransitive.transitive = false
+}
+
+configurations {
+    xmlLibs
+}
+
 dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+
+    api "com.github.tommyettinger:formic:$formicVersion"
+    api "space.earlygrey:shapedrawer:$shapeDrawerVersion"
 
     implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     implementation "com.github.lyze237:gdx-Dyn4j:$gdxDyn4jVersion"
 
-    implementation "space.earlygrey:shapedrawer:$shapeDrawerVersion"
+    xmlLibs "com.github.tommyettinger:formic:$formicVersion"
+    xmlLibs "space.earlygrey:shapedrawer:$shapeDrawerVersion"
+    xmlLibs "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+    xmlLibs "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion"
+    xmlLibs "com.github.lyze237:gdx-Dyn4j:$gdxDyn4jVersion"
+
+    sourceLibsTransitive "com.github.tommyettinger:formic:$formicVersion:sources"
+    sourceLibsTransitive "space.earlygrey:shapedrawer:$shapeDrawerVersion:sources"
+    sourceLibsTransitive "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:sources"
+    sourceLibsTransitive "com.badlogicgames.gdx:gdx-box2d-gwt:$gdxVersion:sources"
+    sourceLibsTransitive "com.github.lyze237:gdx-Dyn4j:$gdxDyn4jVersion:sources"
 
     implementation "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
