@@ -54,8 +54,8 @@ public class CoolGame extends Game {
         new Box2dSoutBehaviour("Left GO", false, leftGo);
 
         // Attach a movement behaviour to both game objects
-        new MoveBehaviour(true, rightGo);
-        new MoveBehaviour(false, leftGo);
+        new Box2dMoveBehaviour(true, rightGo);
+        new Box2dMoveBehaviour(false, leftGo);
     }
 
     @Override
@@ -85,5 +85,46 @@ public class CoolGame extends Game {
     public void resize(int width, int height) {
         viewport.update(width, height);
     }
+}
+
+public class Box2dMoveBehaviour extends BehaviourAdapter {
+  private final boolean right;
+
+  private Box2dBehaviour box2d;
+
+  public Box2dMoveBehaviour(boolean right, GameObject gameObject) {
+      super(gameObject);
+
+      this.right = right;
+  }
+
+  @Override
+  public void start() {
+      // Gets the Box2d behaviour from the game object
+      box2d = getGameObject().getBehaviour(Box2dBehaviour.class);
+
+      // Adds a box fixture to the body
+      var shape = new PolygonShape();
+      shape.setAsBox(0.5f, 0.5f);
+
+      var fixtureDef = new FixtureDef();
+      fixtureDef.shape = shape;
+
+      box2d.getBody().createFixture(fixtureDef);
+      shape.dispose();
+
+      // Moves it to the left or the right
+      box2d.getBody().setTransform(5 * (right ? 1 : -1), 0, 0);
+  }
+
+  @Override
+  public void fixedUpdate() {
+      // Move body a bit around
+      var position = box2d.getBody().getPosition();
+      if (right && position.x < -8)
+        return;
+
+      box2d.getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0, position.x, position.y, true);
+  }
 }
 ```

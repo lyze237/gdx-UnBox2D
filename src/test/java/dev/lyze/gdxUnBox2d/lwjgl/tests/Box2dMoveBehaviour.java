@@ -10,6 +10,8 @@ import lombok.var;
 public class Box2dMoveBehaviour extends BehaviourAdapter {
     private final boolean right;
 
+    private Box2dBehaviour box2d;
+
     public Box2dMoveBehaviour(boolean right, GameObject gameObject) {
         super(gameObject);
 
@@ -18,25 +20,26 @@ public class Box2dMoveBehaviour extends BehaviourAdapter {
 
     @Override
     public void start() {
+        box2d = getGameObject().getBehaviour(Box2dBehaviour.class);
+
         var shape = new PolygonShape();
         shape.setAsBox(0.5f, 0.5f);
 
         var fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
 
-        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().createFixture(fixtureDef);
+        box2d.getBody().createFixture(fixtureDef);
         shape.dispose();
 
-        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().setTransform(5 * (right ? 1 : -1), 0, 0);
+        box2d.getBody().setTransform(5 * (right ? 1 : -1), 0, 0);
     }
 
     @Override
     public void fixedUpdate() {
-        var position = getGameObject().getBehaviour(Box2dBehaviour.class).getBody().getPosition();
+        var position = box2d.getBody().getPosition();
         if (right && position.x < -8)
             return;
 
-        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0,
-                position.x, position.y, true);
+        box2d.getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0, position.x, position.y, true);
     }
 }
