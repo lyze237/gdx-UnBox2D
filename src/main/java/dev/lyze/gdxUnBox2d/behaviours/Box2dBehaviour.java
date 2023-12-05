@@ -37,6 +37,13 @@ public class Box2dBehaviour extends BehaviourAdapter {
         this.bodyDef = bodyDef;
     }
 
+    public Box2dBehaviour(Body body, GameObject gameObject) {
+        super(gameObject);
+
+        bodyDef = null;
+        ((Box2dPhysicsWorld) getUnBox().getPhysicsWorld()).overrideObject(this, this.body = body);
+    }
+
     @Override
     public void awake() {
         super.awake();

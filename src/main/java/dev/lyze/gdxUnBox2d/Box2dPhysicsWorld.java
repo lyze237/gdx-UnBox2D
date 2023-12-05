@@ -30,6 +30,12 @@ public class Box2dPhysicsWorld extends PhysicsWorld<World, Body, BodyDef> {
         return body;
     }
 
+    public Body overrideObject(Behaviour behaviour, Body object) {
+        bodyReferences.put(object, (Box2dBehaviour) behaviour);
+
+        return object;
+    }
+
     @Override
     public void destroyObject(Body obj) {
         contactListener.destroy(bodyReferences.remove(obj));
