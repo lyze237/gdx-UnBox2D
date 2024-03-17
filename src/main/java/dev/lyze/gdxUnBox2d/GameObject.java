@@ -1,6 +1,7 @@
 package dev.lyze.gdxUnBox2d;
 
 import com.badlogic.gdx.utils.Array;
+import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import lombok.var;
  * Main game object of the UnBox library. Holds a Box2D body and behaviours.
  */
 public final class GameObject {
-    @Getter private final UnBox<?> unBox;
+    @Getter private final UnBox unBox;
 
     /**
      * When the game object is enabled all its behaviours receive event calls.
@@ -34,7 +35,7 @@ public final class GameObject {
      *
      * @param unBox The libraries instance.
      */
-    public GameObject(UnBox<?> unBox) {
+    public GameObject(UnBox unBox) {
         this("Game Object", unBox);
     }
 
@@ -44,7 +45,7 @@ public final class GameObject {
      * @param name  The name of the game object.
      * @param unBox The libraries instance.
      */
-    public GameObject(String name, UnBox<?> unBox) {
+    public GameObject(String name, UnBox unBox) {
         this(name, true, unBox);
     }
 
@@ -57,7 +58,7 @@ public final class GameObject {
      *                {@link Behaviour#onDisable()}.
      * @param unBox   The libraries instance.
      */
-    public GameObject(boolean enabled, UnBox<?> unBox) {
+    public GameObject(boolean enabled, UnBox unBox) {
         this("Game Object", enabled, unBox);
     }
 
@@ -71,7 +72,7 @@ public final class GameObject {
      *                {@link Behaviour#onDisable()}.
      * @param unBox   The libraries instance.
      */
-    public GameObject(String name, boolean enabled, UnBox<?> unBox) {
+    public GameObject(String name, boolean enabled, UnBox unBox) {
         this.unBox = unBox;
         this.enabled = enabled;
         this.name = name;
@@ -185,5 +186,9 @@ public final class GameObject {
      */
     public void invalidateExecutionOrder() {
         this.invalidateExecutionOrder = true;
+    }
+
+    public Box2dBehaviour getBox2dBehaviour() {
+        return getBehaviour(Box2dBehaviour.class);
     }
 }

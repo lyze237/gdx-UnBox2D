@@ -10,19 +10,22 @@ import dev.lyze.gdxUnBox2d.options.Box2dPhysicsOptions;
 import lombok.Getter;
 import lombok.var;
 
-public class Box2dPhysicsWorld extends PhysicsWorld<World, Body, BodyDef> {
+public class Box2dPhysicsWorld {
+    @Getter private final World world;
+    @Getter private final UnBox unBox;
+
     @Getter private final Box2dPhysicsOptions options = new Box2dPhysicsOptions();
     private final OrderedMap<Body, Box2dBehaviour> bodyReferences = new OrderedMap<>();
 
     private final Box2dWorldContactListener contactListener;
 
-    public Box2dPhysicsWorld(World world) {
-        super(world);
+    public Box2dPhysicsWorld(World world, UnBox unBox) {
+        this.world = world;
+        this.unBox = unBox;
 
         world.setContactListener(contactListener = new Box2dWorldContactListener(this));
     }
 
-    @Override
     public Body createObject(Behaviour behaviour, BodyDef objectToAdd) {
         var body = getWorld().createBody(objectToAdd);
         bodyReferences.put(body, (Box2dBehaviour) behaviour);
@@ -36,13 +39,11 @@ public class Box2dPhysicsWorld extends PhysicsWorld<World, Body, BodyDef> {
         return object;
     }
 
-    @Override
     public void destroyObject(Body obj) {
         contactListener.destroy(bodyReferences.remove(obj));
         getWorld().destroyBody(obj);
     }
 
-    @Override
     public void step(float timeStep) {
         getWorld().step(timeStep, options.getVelocityIteration(), options.getPositionIterations());
         contactListener.update();
@@ -51,7 +52,6 @@ public class Box2dPhysicsWorld extends PhysicsWorld<World, Body, BodyDef> {
     private final Array<Body> tempBodies = new Array<>();
 
     // https://web.archive.org/web/20230415221545/https://gamengineering.blogspot.com/2018/07/libgdx-tutorial-fix-your-time-step.html
-    @Override
     public void interpolateMovement(float accumulator) {
         float alpha = accumulator / getUnBox().getOptions().getTimeStep();
 

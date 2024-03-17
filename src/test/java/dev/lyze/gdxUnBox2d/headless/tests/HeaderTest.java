@@ -1,6 +1,8 @@
 package dev.lyze.gdxUnBox2d.headless.tests;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import dev.lyze.gdxUnBox2d.GameObject;
@@ -8,7 +10,6 @@ import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.headless.LibgdxHeadlessUnitTest;
-import dev.lyze.gdxUnBox2d.NoPhysicsWorld;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ import java.util.Random;
 public class HeaderTest extends LibgdxHeadlessUnitTest {
     @Test
     public void PerfTest() {
-        var unBox = new UnBox<>(new NoPhysicsWorld());
+        var unBox = new UnBox();
 
         for (int i = 0; i < 100_000; i++) {
             new GameObject(unBox);
@@ -43,7 +44,7 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
 
     @Test
     public void EnabledDisabledTest() {
-        var unBox = new UnBox<>(new NoPhysicsWorld());
+        var unBox = new UnBox();
 
         var enabledGo = new GameObject(unBox);
         var disabledGo = new GameObject(false, unBox);
@@ -68,7 +69,7 @@ public class HeaderTest extends LibgdxHeadlessUnitTest {
 
     @Test
     public void RenderOrderTest() {
-        var unBox = new UnBox<>(new NoPhysicsWorld());
+        var unBox = new UnBox();
         var random = new Random();
 
         var behaviours = new Array<RenderOrderBehaviour>();

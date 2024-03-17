@@ -4,8 +4,11 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
+import dev.lyze.gdxUnBox2d.options.Box2dPhysicsOptions;
 import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
 import lombok.Getter;
 import lombok.var;
@@ -27,10 +30,10 @@ import java.util.Comparator;
  * {@link ApplicationListener#render()} loop in this order.
  * </p>
  */
-public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
+public class UnBox {
     @Getter private final PhysicsOptions options = new PhysicsOptions();
 
-    @Getter private final TPhysicsWorld physicsWorld;
+    @Getter private final Box2dPhysicsWorld physicsWorld;
 
     final OrderedMap<GameObject, Array<Behaviour>> gameObjects = new OrderedMap<>();
     final Array<Behaviour> behavioursToRender = new Array<>();
@@ -43,11 +46,17 @@ public class UnBox<TPhysicsWorld extends PhysicsWorld<?, ?, ?>> {
     private final Array<Behaviour> behavioursToDestroy = new Array<>();
 
     /**
+     * Instantiates an instance of this object with a Box2D World with (0, 0) gravity.
+     */
+    public UnBox() {
+        this(new World(new Vector2(0, 0), true));
+    }
+
+    /**
      * Instantiates an instance of this object.
      */
-    public UnBox(TPhysicsWorld physicsWorld) {
-        this.physicsWorld = physicsWorld;
-        physicsWorld.setUnBox(this);
+    public UnBox(World world) {
+        this.physicsWorld = new Box2dPhysicsWorld(world, this);
     }
 
     /**

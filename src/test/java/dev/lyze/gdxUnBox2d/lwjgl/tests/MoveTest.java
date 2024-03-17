@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 public class MoveTest extends LibgdxLwjglUnitTest {
     private Viewport viewport;
 
-    private UnBox<Box2dPhysicsWorld> unBox;
+    private UnBox unBox;
     private Box2DDebugRenderer debugRenderer;
 
     @Override
@@ -29,14 +29,14 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         viewport = new FitViewport(30, 10);
         viewport.getCamera().translate(-5, 0, 0);
 
-        unBox = new UnBox<>(new Box2dPhysicsWorld(new World(new Vector2(0, 0), true)));
+        unBox = new UnBox(new World(new Vector2(0, 0), true));
         debugRenderer = new Box2DDebugRenderer();
     }
 
     @Test
     @Tag("lwjgl")
     public void MovementTest() {
-        unBox = new UnBox<>(new Box2dPhysicsWorld(new World(new Vector2(0, 0), true)));
+        unBox = new UnBox(new World(new Vector2(0, 0), true));
 
         var rightGo = new GameObject(unBox);
         new Box2dBehaviour(BodyDefType.DynamicBody, rightGo);

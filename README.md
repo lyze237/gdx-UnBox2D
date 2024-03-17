@@ -39,7 +39,7 @@ public class CoolGame extends Game {
         debugRenderer = new Box2DDebugRenderer();
 
         // Create an instance of the library, with no gravity
-        unBox = new UnBox<>(new NoPhysicsWorld()); // Alternative if you want to use physics: new UnBox<>(new Box2dPhysicsWorld(new World(new Vector2(0, 0), true)));
+        unBox = new UnBox(); // Alternative if you want to use physics: new UnBox(new World(new Vector2(0, 0), true));
 
         // Create two game objects, those get automatically added to the libraries instance
         var rightGo = new GameObject(unBox);

@@ -41,7 +41,7 @@ public class Box2dBehaviour extends BehaviourAdapter {
         super(gameObject);
 
         bodyDef = null;
-        ((Box2dPhysicsWorld) getUnBox().getPhysicsWorld()).overrideObject(this, this.body = body);
+        getUnBox().getPhysicsWorld().overrideObject(this, this.body = body);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Box2dBehaviour extends BehaviourAdapter {
         super.awake();
 
         if (bodyDef != null)
-            body = ((Box2dPhysicsWorld) getUnBox().getPhysicsWorld()).createObject(this, bodyDef);
+            body = getUnBox().getPhysicsWorld().createObject(this, bodyDef);
     }
 
     @Override
@@ -72,6 +72,6 @@ public class Box2dBehaviour extends BehaviourAdapter {
     public void onDestroy() {
         super.onDestroy();
 
-        ((Box2dPhysicsWorld) getUnBox().getPhysicsWorld()).destroyObject(body);
+        getUnBox().getPhysicsWorld().destroyObject(body);
     }
 }
