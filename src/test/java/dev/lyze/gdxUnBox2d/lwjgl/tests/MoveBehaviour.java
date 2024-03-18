@@ -2,9 +2,9 @@ package dev.lyze.gdxUnBox2d.lwjgl.tests;
 
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import dev.lyze.gdxUnBox2d.Box2dBehaviour;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
-import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import lombok.var;
 
 public class MoveBehaviour extends BehaviourAdapter {
@@ -36,6 +36,7 @@ public class MoveBehaviour extends BehaviourAdapter {
         if (right && position.x < -8)
             return;
 
-        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0, position.x, position.y, true);
+        getGameObject().getBehaviour(Box2dBehaviour.class).getBody().applyLinearImpulse(0.1f * (right ? -1 : -0.2f), 0,
+                position.x, position.y, true);
     }
 }

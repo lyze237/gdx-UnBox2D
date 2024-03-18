@@ -1,10 +1,10 @@
-package dev.lyze.gdxUnBox2d.behaviours;
+package dev.lyze.gdxUnBox2d;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import dev.lyze.gdxUnBox2d.BodyDefType;
 import dev.lyze.gdxUnBox2d.GameObject;
-import dev.lyze.gdxUnBox2d.Box2dPhysicsWorld;
+import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,7 +41,7 @@ public class Box2dBehaviour extends BehaviourAdapter {
         super(gameObject);
 
         bodyDef = null;
-        getUnBox().getPhysicsWorld().overrideObject(this, this.body = body);
+        getUnBox().overrideObject(this, this.body = body);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class Box2dBehaviour extends BehaviourAdapter {
         super.awake();
 
         if (bodyDef != null)
-            body = getUnBox().getPhysicsWorld().createObject(this, bodyDef);
+            body = getUnBox().createObject(this, bodyDef);
     }
 
     @Override
@@ -72,6 +72,6 @@ public class Box2dBehaviour extends BehaviourAdapter {
     public void onDestroy() {
         super.onDestroy();
 
-        getUnBox().getPhysicsWorld().destroyObject(body);
+        getUnBox().destroyObject(body);
     }
 }

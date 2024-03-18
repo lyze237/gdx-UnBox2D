@@ -3,13 +3,12 @@ package dev.lyze.gdxUnBox2d;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.var;
 
 public class Box2dWorldContactListener implements ContactListener {
-    private final Box2dPhysicsWorld world;
+    private final UnBox unBox;
 
     private final Array<WorldContactListenerEntity> collidingEntities = new Array<>();
     private final Pool<WorldContactListenerEntity> collidingEntitiesPool = new Pool<WorldContactListenerEntity>() {
@@ -19,20 +18,20 @@ public class Box2dWorldContactListener implements ContactListener {
         }
     };
 
-    public Box2dWorldContactListener(Box2dPhysicsWorld world) {
-        this.world = world;
+    public Box2dWorldContactListener(UnBox unBox) {
+        this.unBox = unBox;
     }
 
     @Override
     public void beginContact(Contact contact) {
-        var a = world.findBehaviour(contact.getFixtureA().getBody());
-        var b = world.findBehaviour(contact.getFixtureB().getBody());
+        var a = unBox.findBehaviour(contact.getFixtureA().getBody());
+        var b = unBox.findBehaviour(contact.getFixtureB().getBody());
 
-        var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
+        var aBehaviours = unBox.gameObjects.get(a.getGameObject());
         for (int i = 0; i < aBehaviours.size; i++)
             aBehaviours.get(i).onCollisionEnter(b, contact);
 
-        var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
+        var bBehaviours = unBox.gameObjects.get(b.getGameObject());
         for (int i = 0; i < bBehaviours.size; i++)
             bBehaviours.get(i).onCollisionEnter(a, contact);
 
@@ -41,11 +40,11 @@ public class Box2dWorldContactListener implements ContactListener {
 
     @Override
     public void endContact(Contact contact) {
-        var a = world.findBehaviour(contact.getFixtureA().getBody());
-        var b = world.findBehaviour(contact.getFixtureB().getBody());
+        var a = unBox.findBehaviour(contact.getFixtureA().getBody());
+        var b = unBox.findBehaviour(contact.getFixtureB().getBody());
 
         if (a != null) {
-            var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
+            var aBehaviours = unBox.gameObjects.get(a.getGameObject());
             if (aBehaviours != null) {
                 for (int i = 0; i < aBehaviours.size; i++)
                     aBehaviours.get(i).onCollisionExit(b, contact);
@@ -53,7 +52,7 @@ public class Box2dWorldContactListener implements ContactListener {
         }
 
         if (b != null) {
-            var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
+            var bBehaviours = unBox.gameObjects.get(b.getGameObject());
             if (bBehaviours != null) {
                 for (int i = 0; i < bBehaviours.size; i++)
                     bBehaviours.get(i).onCollisionExit(a, contact);
@@ -72,11 +71,11 @@ public class Box2dWorldContactListener implements ContactListener {
         for (int i = 0; i < collidingEntities.size; i++) {
             var collidingEntity = collidingEntities.get(i);
 
-            var aBehaviours = world.getUnBox().gameObjects.get(collidingEntity.getA().getGameObject());
+            var aBehaviours = unBox.gameObjects.get(collidingEntity.getA().getGameObject());
             for (int j = 0; j < aBehaviours.size; j++)
                 aBehaviours.get(j).onCollisionStay(collidingEntity.getB());
 
-            var bBehaviours = world.getUnBox().gameObjects.get(collidingEntity.getB().getGameObject());
+            var bBehaviours = unBox.gameObjects.get(collidingEntity.getB().getGameObject());
             for (int j = 0; j < bBehaviours.size; j++)
                 bBehaviours.get(j).onCollisionStay(collidingEntity.getA());
         }
@@ -84,15 +83,15 @@ public class Box2dWorldContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-        var a = world.findBehaviour(contact.getFixtureA().getBody());
-        var b = world.findBehaviour(contact.getFixtureB().getBody());
+        var a = unBox.findBehaviour(contact.getFixtureA().getBody());
+        var b = unBox.findBehaviour(contact.getFixtureB().getBody());
 
-        var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
+        var aBehaviours = unBox.gameObjects.get(a.getGameObject());
         for (int i = 0; i < aBehaviours.size; i++)
             if (aBehaviours.get(i).onCollisionPreSolve(b, contact, oldManifold))
                 break;
 
-        var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
+        var bBehaviours = unBox.gameObjects.get(b.getGameObject());
         for (int i = 0; i < bBehaviours.size; i++)
             if (bBehaviours.get(i).onCollisionPreSolve(a, contact, oldManifold))
                 break;
@@ -100,15 +99,15 @@ public class Box2dWorldContactListener implements ContactListener {
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-        var a = world.findBehaviour(contact.getFixtureA().getBody());
-        var b = world.findBehaviour(contact.getFixtureB().getBody());
+        var a = unBox.findBehaviour(contact.getFixtureA().getBody());
+        var b = unBox.findBehaviour(contact.getFixtureB().getBody());
 
-        var aBehaviours = world.getUnBox().gameObjects.get(a.getGameObject());
+        var aBehaviours = unBox.gameObjects.get(a.getGameObject());
         for (int i = 0; i < aBehaviours.size; i++)
             if (aBehaviours.get(i).onCollisionPostSolve(b, contact, impulse))
                 break;
 
-        var bBehaviours = world.getUnBox().gameObjects.get(b.getGameObject());
+        var bBehaviours = unBox.gameObjects.get(b.getGameObject());
         for (int i = 0; i < bBehaviours.size; i++)
             if (bBehaviours.get(i).onCollisionPostSolve(a, contact, impulse))
                 break;

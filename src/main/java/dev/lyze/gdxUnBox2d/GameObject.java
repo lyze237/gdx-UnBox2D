@@ -1,7 +1,6 @@
 package dev.lyze.gdxUnBox2d;
 
 import com.badlogic.gdx.utils.Array;
-import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

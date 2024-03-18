@@ -10,11 +10,10 @@ import dev.lyze.gdxUnBox2d.UnBox;
 import dev.lyze.gdxUnBox2d.behaviours.BehaviourAdapter;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.headless.LibgdxHeadlessUnitTest;
+import java.util.Random;
 import lombok.var;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 public class HeaderTest extends LibgdxHeadlessUnitTest {
     @Test

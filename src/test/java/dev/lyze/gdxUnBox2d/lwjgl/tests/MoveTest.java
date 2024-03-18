@@ -8,12 +8,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import dev.lyze.gdxUnBox2d.BodyDefType;
+import dev.lyze.gdxUnBox2d.Box2dBehaviour;
 import dev.lyze.gdxUnBox2d.GameObject;
 import dev.lyze.gdxUnBox2d.UnBox;
-import dev.lyze.gdxUnBox2d.behaviours.Box2dBehaviour;
 import dev.lyze.gdxUnBox2d.behaviours.SoutBehaviour;
 import dev.lyze.gdxUnBox2d.lwjgl.LibgdxLwjglUnitTest;
-import dev.lyze.gdxUnBox2d.Box2dPhysicsWorld;
 import lombok.var;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -58,7 +57,7 @@ public class MoveTest extends LibgdxLwjglUnitTest {
         unBox.preRender(Gdx.graphics.getDeltaTime());
 
         viewport.apply();
-        debugRenderer.render(unBox.getPhysicsWorld().getWorld(), viewport.getCamera().combined);
+        debugRenderer.render(unBox.getWorld(), viewport.getCamera().combined);
 
         unBox.postRender();
     }

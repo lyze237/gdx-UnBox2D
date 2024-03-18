@@ -5,16 +5,16 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.OrderedMap;
 import dev.lyze.gdxUnBox2d.options.Box2dPhysicsOptions;
-import dev.lyze.gdxUnBox2d.options.PhysicsOptions;
+import java.util.Comparator;
 import lombok.Getter;
 import lombok.var;
 import space.earlygrey.shapedrawer.ShapeDrawer;
-
-import java.util.Comparator;
 
 // https://docs.unity3d.com/Manual/ExecutionOrder.html
 
@@ -31,9 +31,11 @@ import java.util.Comparator;
  * </p>
  */
 public class UnBox {
-    @Getter private final PhysicsOptions options = new PhysicsOptions();
+    @Getter private final Box2dPhysicsOptions options = new Box2dPhysicsOptions();
+    @Getter private final World world;
 
-    @Getter private final Box2dPhysicsWorld physicsWorld;
+    private final OrderedMap<Body, Box2dBehaviour> bodyReferences = new OrderedMap<>();
+    private final Box2dWorldContactListener contactListener;
 
     final OrderedMap<GameObject, Array<Behaviour>> gameObjects = new OrderedMap<>();
     final Array<Behaviour> behavioursToRender = new Array<>();
@@ -46,7 +48,8 @@ public class UnBox {
     private final Array<Behaviour> behavioursToDestroy = new Array<>();
 
     /**
-     * Instantiates an instance of this object with a Box2D World with (0, 0) gravity.
+     * Instantiates an instance of this object with a Box2D World with (0, 0)
+     * gravity.
      */
     public UnBox() {
         this(new World(new Vector2(0, 0), true));
@@ -56,7 +59,8 @@ public class UnBox {
      * Instantiates an instance of this object.
      */
     public UnBox(World world) {
-        this.physicsWorld = new Box2dPhysicsWorld(world, this);
+        this.world = world;
+        world.setContactListener(contactListener = new Box2dWorldContactListener(this));
     }
 
     /**
@@ -198,12 +202,40 @@ public class UnBox {
 
             updateFixedObjects();
 
-            physicsWorld.step(timeStep);
+            getWorld().step(timeStep, options.getVelocityIteration(), options.getPositionIterations());
+            contactListener.update();
+
             accumulator -= timeStep;
         }
 
-        if (options.isInterpolateMovement())
-            physicsWorld.interpolateMovement(accumulator);
+        if (options.isInterpolateMovement()) {
+            interpolateMovement(accumulator);
+        }
+    }
+
+    private final Array<Body> tempBodies = new Array<>();
+
+    // https://web.archive.org/web/20230415221545/https://gamengineering.blogspot.com/2018/07/libgdx-tutorial-fix-your-time-step.html
+    public void interpolateMovement(float accumulator) {
+        float alpha = accumulator / options.getTimeStep();
+
+        getWorld().getBodies(tempBodies);
+
+        for (int i = 0; i < tempBodies.size; i++) {
+            var body = tempBodies.get(i);
+
+            if (body.getType() == BodyDef.BodyType.StaticBody)
+                continue;
+
+            var previousPos = body.getPosition();
+            var previousAngle = body.getAngle();
+
+            var posX = previousPos.x * (1f - alpha) + previousPos.x * alpha;
+            var posY = previousPos.y * (1f - alpha) + previousPos.y * alpha;
+            var angle = previousAngle * (1f - alpha) + previousAngle * alpha;
+
+            body.setTransform(posX, posY, angle);
+        }
     }
 
     private void updateFixedObjects() {
@@ -430,5 +462,39 @@ public class UnBox {
      */
     public void invalidateRenderOrder() {
         invalidateRenderOrder = true;
+    }
+
+    Body createObject(Behaviour behaviour, BodyDef objectToAdd) {
+        var body = getWorld().createBody(objectToAdd);
+        bodyReferences.put(body, (Box2dBehaviour) behaviour);
+
+        return body;
+    }
+
+    Body overrideObject(Behaviour behaviour, Body object) {
+        bodyReferences.put(object, (Box2dBehaviour) behaviour);
+
+        return object;
+    }
+
+    void destroyObject(Body obj) {
+        contactListener.destroy(bodyReferences.remove(obj));
+        getWorld().destroyBody(obj);
+    }
+
+    /**
+     * Helper method to find the behaviour based on a Box2D Body.
+     *
+     * @param bodyToFind The Box2D body to search for.
+     * @return The GameObject if found, or null.
+     */
+    public Behaviour findBehaviour(Body bodyToFind) {
+        for (int i = 0; i < bodyReferences.orderedKeys().size; i++) {
+            var body = bodyReferences.orderedKeys().get(i);
+            if (body.equals(bodyToFind))
+                return bodyReferences.get(body);
+        }
+
+        return null;
     }
 }

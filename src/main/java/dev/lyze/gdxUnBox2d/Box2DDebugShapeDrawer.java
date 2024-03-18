@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-
 package dev.lyze.gdxUnBox2d;
 
 import com.badlogic.gdx.graphics.Color;
@@ -24,12 +23,12 @@ import com.badlogic.gdx.physics.box2d.JointDef.JointType;
 import com.badlogic.gdx.physics.box2d.Shape.Type;
 import com.badlogic.gdx.physics.box2d.joints.PulleyJoint;
 import com.badlogic.gdx.utils.Array;
+import java.util.Iterator;
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
-import java.util.Iterator;
-
 /**
- * An alternative to {@link Box2DDebugRenderer Box2DDebugRenderer} that implements {@link ShapeDrawer}.
+ * An alternative to {@link Box2DDebugRenderer Box2DDebugRenderer} that
+ * implements {@link ShapeDrawer}.
  */
 public class Box2DDebugShapeDrawer {
 
@@ -52,13 +51,17 @@ public class Box2DDebugShapeDrawer {
     private boolean drawVelocities;
     private boolean drawContacts;
 
-
     public Box2DDebugShapeDrawer(ShapeDrawer shapeDrawer) {
         this(shapeDrawer, true, true, false, true, false, true);
     }
 
     /**
-     * Ensure that the ShapeDrawer passed to this class has an appropriate {@link ShapeDrawer#setDefaultLineWidth(float) defaultLineWidth} and {@link ShapeDrawer#setPixelSize(float) pixelSize} to match your viewport settings. The width of the circle used to display contacts is 2 * defaultLineWidth.
+     * Ensure that the ShapeDrawer passed to this class has an appropriate
+     * {@link ShapeDrawer#setDefaultLineWidth(float) defaultLineWidth} and
+     * {@link ShapeDrawer#setPixelSize(float) pixelSize} to match your viewport
+     * settings. The width of the circle used to display contacts is 2 *
+     * defaultLineWidth.
+     * 
      * @param shapeDrawer
      * @param drawBodies
      * @param drawJoints
@@ -68,8 +71,8 @@ public class Box2DDebugShapeDrawer {
      * @param drawContacts
      * @see ShapeDrawer
      */
-    public Box2DDebugShapeDrawer(ShapeDrawer shapeDrawer, boolean drawBodies, boolean drawJoints, boolean drawAABBs, boolean drawInactiveBodies,
-                                 boolean drawVelocities, boolean drawContacts) {
+    public Box2DDebugShapeDrawer(ShapeDrawer shapeDrawer, boolean drawBodies, boolean drawJoints, boolean drawAABBs,
+            boolean drawInactiveBodies, boolean drawVelocities, boolean drawContacts) {
         // next we setup the immediate mode renderer
         this.shapeDrawer = shapeDrawer;
 
@@ -86,7 +89,7 @@ public class Box2DDebugShapeDrawer {
     }
 
     /** This assumes that the projection matrix has already been set. */
-    public void render (World world) {
+    public void render(World world) {
         renderBodies(world);
     }
 
@@ -99,12 +102,13 @@ public class Box2DDebugShapeDrawer {
     public final Color AABB_COLOR = new Color(1.0f, 0, 1.0f, 1f);
     public final Color VELOCITY_COLOR = new Color(1.0f, 0, 0f, 1f);
 
-    private void renderBodies (World world) {
+    private void renderBodies(World world) {
         if (drawBodies || drawAABBs) {
             world.getBodies(bodies);
             for (Iterator<Body> iter = bodies.iterator(); iter.hasNext();) {
                 Body body = iter.next();
-                if (body.isActive() || drawInactiveBodies) renderBody(body);
+                if (body.isActive() || drawInactiveBodies)
+                    renderBody(body);
             }
         }
 
@@ -121,7 +125,7 @@ public class Box2DDebugShapeDrawer {
         }
     }
 
-    protected void renderBody (Body body) {
+    protected void renderBody(Body body) {
         Transform transform = body.getTransform();
         for (Fixture fixture : body.getFixtureList()) {
             if (drawBodies) {
@@ -138,7 +142,7 @@ public class Box2DDebugShapeDrawer {
         }
     }
 
-    private Color getColorByBody (Body body) {
+    private Color getColorByBody(Body body) {
         if (body.isActive() == false)
             return SHAPE_NOT_ACTIVE;
         else if (body.getType() == BodyType.StaticBody)
@@ -151,10 +155,10 @@ public class Box2DDebugShapeDrawer {
             return SHAPE_AWAKE;
     }
 
-    private void drawAABB (Fixture fixture, Transform transform) {
+    private void drawAABB(Fixture fixture, Transform transform) {
         if (fixture.getType() == Type.Circle) {
 
-            CircleShape shape = (CircleShape)fixture.getShape();
+            CircleShape shape = (CircleShape) fixture.getShape();
             float radius = shape.getRadius();
             vertices[0].set(shape.getPosition());
             transform.mul(vertices[0]);
@@ -169,7 +173,7 @@ public class Box2DDebugShapeDrawer {
 
             drawSolidPolygon(vertices, 4, AABB_COLOR, true);
         } else if (fixture.getType() == Type.Polygon) {
-            PolygonShape shape = (PolygonShape)fixture.getShape();
+            PolygonShape shape = (PolygonShape) fixture.getShape();
             int vertexCount = shape.getVertexCount();
 
             shape.getVertex(0, vertices[0]);
@@ -197,17 +201,18 @@ public class Box2DDebugShapeDrawer {
     private static Vector2 t = new Vector2();
     private static Vector2 axis = new Vector2();
 
-    private void drawShape (Fixture fixture, Transform transform, Color color) {
+    private void drawShape(Fixture fixture, Transform transform, Color color) {
         if (fixture.getType() == Type.Circle) {
-            CircleShape circle = (CircleShape)fixture.getShape();
+            CircleShape circle = (CircleShape) fixture.getShape();
             t.set(circle.getPosition());
             transform.mul(t);
-            drawSolidCircle(t, circle.getRadius(), axis.set(transform.vals[Transform.COS], transform.vals[Transform.SIN]), color);
+            drawSolidCircle(t, circle.getRadius(),
+                    axis.set(transform.vals[Transform.COS], transform.vals[Transform.SIN]), color);
             return;
         }
 
         if (fixture.getType() == Type.Edge) {
-            EdgeShape edge = (EdgeShape)fixture.getShape();
+            EdgeShape edge = (EdgeShape) fixture.getShape();
             edge.getVertex1(vertices[0]);
             edge.getVertex2(vertices[1]);
             transform.mul(vertices[0]);
@@ -217,7 +222,7 @@ public class Box2DDebugShapeDrawer {
         }
 
         if (fixture.getType() == Type.Polygon) {
-            PolygonShape chain = (PolygonShape)fixture.getShape();
+            PolygonShape chain = (PolygonShape) fixture.getShape();
             int vertexCount = chain.getVertexCount();
             for (int i = 0; i < vertexCount; i++) {
                 chain.getVertex(i, vertices[i]);
@@ -228,7 +233,7 @@ public class Box2DDebugShapeDrawer {
         }
 
         if (fixture.getType() == Type.Chain) {
-            ChainShape chain = (ChainShape)fixture.getShape();
+            ChainShape chain = (ChainShape) fixture.getShape();
             int vertexCount = chain.getVertexCount();
             for (int i = 0; i < vertexCount; i++) {
                 chain.getVertex(i, vertices[i]);
@@ -242,12 +247,12 @@ public class Box2DDebugShapeDrawer {
     private final Vector2 v = new Vector2();
     private final Vector2 lv = new Vector2();
 
-    private void drawSolidCircle (Vector2 center, float radius, Vector2 axis, Color color) {
+    private void drawSolidCircle(Vector2 center, float radius, Vector2 axis, Color color) {
         float angle = 0;
-        float angleInc = 2 * (float)Math.PI / 20;
+        float angleInc = 2 * (float) Math.PI / 20;
         shapeDrawer.setColor(color.r, color.g, color.b, color.a);
         for (int i = 0; i < 20; i++, angle += angleInc) {
-            v.set((float)Math.cos(angle) * radius + center.x, (float)Math.sin(angle) * radius + center.y);
+            v.set((float) Math.cos(angle) * radius + center.x, (float) Math.sin(angle) * radius + center.y);
             if (i == 0) {
                 lv.set(v);
                 f.set(v);
@@ -260,7 +265,7 @@ public class Box2DDebugShapeDrawer {
         shapeDrawer.line(center.x, center.y, center.x + axis.x * radius, center.y + axis.y * radius);
     }
 
-    private void drawSolidPolygon (Vector2[] vertices, int vertexCount, Color color, boolean closed) {
+    private void drawSolidPolygon(Vector2[] vertices, int vertexCount, Color color, boolean closed) {
         shapeDrawer.setColor(color.r, color.g, color.b, color.a);
         lv.set(vertices[0]);
         f.set(vertices[0]);
@@ -269,10 +274,11 @@ public class Box2DDebugShapeDrawer {
             shapeDrawer.line(lv.x, lv.y, v.x, v.y);
             lv.set(v);
         }
-        if (closed) shapeDrawer.line(f.x, f.y, lv.x, lv.y);
+        if (closed)
+            shapeDrawer.line(f.x, f.y, lv.x, lv.y);
     }
 
-    private void drawJoint (Joint joint) {
+    private void drawJoint(Joint joint) {
         Body bodyA = joint.getBodyA();
         Body bodyB = joint.getBodyB();
         Transform xf1 = bodyA.getTransform();
@@ -286,7 +292,7 @@ public class Box2DDebugShapeDrawer {
         if (joint.getType() == JointType.DistanceJoint) {
             drawSegment(p1, p2, JOINT_COLOR);
         } else if (joint.getType() == JointType.PulleyJoint) {
-            PulleyJoint pulley = (PulleyJoint)joint;
+            PulleyJoint pulley = (PulleyJoint) joint;
             Vector2 s1 = pulley.getGroundAnchorA();
             Vector2 s2 = pulley.getGroundAnchorB();
             drawSegment(s1, p1, JOINT_COLOR);
@@ -301,72 +307,73 @@ public class Box2DDebugShapeDrawer {
         }
     }
 
-    private void drawSegment (Vector2 x1, Vector2 x2, Color color) {
+    private void drawSegment(Vector2 x1, Vector2 x2, Color color) {
         shapeDrawer.setColor(color);
         shapeDrawer.line(x1.x, x1.y, x2.x, x2.y);
     }
 
-    private void drawContact (Contact contact) {
+    private void drawContact(Contact contact) {
         WorldManifold worldManifold = contact.getWorldManifold();
-        if (worldManifold.getNumberOfContactPoints() == 0) return;
+        if (worldManifold.getNumberOfContactPoints() == 0)
+            return;
         Vector2 point = worldManifold.getPoints()[0];
         shapeDrawer.setColor(getColorByBody(contact.getFixtureA().getBody()));
         shapeDrawer.circle(point.x, point.y, shapeDrawer.getDefaultLineWidth() * 2);
     }
 
-    public boolean isDrawBodies () {
+    public boolean isDrawBodies() {
         return drawBodies;
     }
 
-    public void setDrawBodies (boolean drawBodies) {
+    public void setDrawBodies(boolean drawBodies) {
         this.drawBodies = drawBodies;
     }
 
-    public boolean isDrawJoints () {
+    public boolean isDrawJoints() {
         return drawJoints;
     }
 
-    public void setDrawJoints (boolean drawJoints) {
+    public void setDrawJoints(boolean drawJoints) {
         this.drawJoints = drawJoints;
     }
 
-    public boolean isDrawAABBs () {
+    public boolean isDrawAABBs() {
         return drawAABBs;
     }
 
-    public void setDrawAABBs (boolean drawAABBs) {
+    public void setDrawAABBs(boolean drawAABBs) {
         this.drawAABBs = drawAABBs;
     }
 
-    public boolean isDrawInactiveBodies () {
+    public boolean isDrawInactiveBodies() {
         return drawInactiveBodies;
     }
 
-    public void setDrawInactiveBodies (boolean drawInactiveBodies) {
+    public void setDrawInactiveBodies(boolean drawInactiveBodies) {
         this.drawInactiveBodies = drawInactiveBodies;
     }
 
-    public boolean isDrawVelocities () {
+    public boolean isDrawVelocities() {
         return drawVelocities;
     }
 
-    public void setDrawVelocities (boolean drawVelocities) {
+    public void setDrawVelocities(boolean drawVelocities) {
         this.drawVelocities = drawVelocities;
     }
 
-    public boolean isDrawContacts () {
+    public boolean isDrawContacts() {
         return drawContacts;
     }
 
-    public void setDrawContacts (boolean drawContacts) {
+    public void setDrawContacts(boolean drawContacts) {
         this.drawContacts = drawContacts;
     }
 
-    public static Vector2 getAxis () {
+    public static Vector2 getAxis() {
         return axis;
     }
 
-    public static void setAxis (Vector2 axis) {
+    public static void setAxis(Vector2 axis) {
         Box2DDebugShapeDrawer.axis = axis;
     }
 }
