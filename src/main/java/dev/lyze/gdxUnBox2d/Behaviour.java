@@ -68,7 +68,7 @@ public abstract class Behaviour {
 
     /**
      *
-     * @param other       The other object this object collides with.
+     * @param other       The other object this object collides with or null when it collides with a non unbox2d body.
      * @param contact     Infos about the collision.
      * @param oldManifold {@link Manifold}
      * @return True to cancel running the event
@@ -78,7 +78,7 @@ public abstract class Behaviour {
 
     /**
      *
-     * @param other   The other object this object collides with.
+     * @param other   The other object this object collides with or null when it collides with a non unbox2d body.
      * @param contact Infos about the collision.
      * @param impulse {@link ContactImpulse}
      * @return True to cancel running the event
@@ -88,21 +88,21 @@ public abstract class Behaviour {
     /**
      * This method gets called when a Box2D collision happens with this object.
      * 
-     * @param other   The other object this object collides with.
+     * @param other   The other object this object collides with or null when it collides with a non unbox2d body.
      * @param contact Infos about the collision.
      */
     public abstract void onCollisionEnter(Behaviour other, Contact contact);
 
     /**
      * This method gets continuously called once per fixed update when a collision
-     * still occurs.
+     * still occurs. However, this method isn't executed when the body is colliding with a non unbox2d body.
      * 
      * @param other The other object this object collides with.
      */
     public abstract void onCollisionStay(Behaviour other);
 
     /**
-     * This method gets called when a Box2D collision stops with this object.
+     * This method gets called when a Box2D collision stops with this object or null when it collides with a non unbox2d body.
      * 
      * @param other   The other object this object stopped colliding with.
      * @param contact Infos about the collision.
