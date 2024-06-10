@@ -143,7 +143,7 @@ public class Box2dWorldContactListener implements ContactListener {
         }
 
         public boolean is(Box2dBehaviour a, Box2dBehaviour b) {
-            return (this.a == a && this.b == b) || (this.a == b & this.b == a);
+            return (this.a == a && this.b == b) || (this.a == b && this.b == a);
         }
 
         public boolean contains(Box2dBehaviour obj) {
