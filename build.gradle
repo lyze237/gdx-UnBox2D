@@ -32,7 +32,7 @@ dependencies {
 
     implementation "space.earlygrey:shapedrawer:$shapeDrawerVersion"
 
-    implementation "org.projectlombok:lombok:$lombokVersion"
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
 
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
