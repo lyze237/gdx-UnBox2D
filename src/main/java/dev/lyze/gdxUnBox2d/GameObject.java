@@ -96,6 +96,16 @@ public final class GameObject {
     }
 
     /**
+     * Checks if this game object has a specific behaviour class.
+     *
+     * @param behaviourClass The class type we want to search for.
+     * @return The found behaviour or null.
+     */
+    public <T extends Behaviour> boolean hasBehaviour(Class<T> behaviourClass) {
+        return getBehaviour(behaviourClass) != null;
+    }
+
+    /**
      * Gets the first behaviour instance with the specified type of this game
      * object.
      *
