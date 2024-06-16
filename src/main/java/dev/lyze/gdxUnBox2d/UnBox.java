@@ -457,6 +457,32 @@ public class UnBox {
     }
 
     /**
+     * Find the first behaviour instance with the specified type.
+     *
+     * @param behaviourClass The class type we want to search for.
+     * @return The first behaviour or null.
+     */
+    public <T extends Behaviour> T findBehaviour(Class<T> behaviourClass) {
+        for (int i = 0; i < behavioursToAdd.size; i++)
+            if (behavioursToAdd.get(i).getClass().equals(behaviourClass))
+                return (T) behavioursToAdd.get(i);
+
+        for (int key = 0; key < gameObjects.orderedKeys().size; key++) {
+            var gameObject = gameObjects.orderedKeys().get(key);
+            var behaviours = gameObjects.get(gameObject);
+
+            for (int i = 0; i < behaviours.size; i++) {
+                var behaviour = behaviours.get(i);
+
+                if (behaviour.getClass().equals(behaviourClass))
+                    return (T) behaviour;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * When a behaviours render order gets updated unBox doesn't get notified about
      * that, hence you need to call this method afterwards.
      */
