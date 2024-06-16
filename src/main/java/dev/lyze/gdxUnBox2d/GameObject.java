@@ -1,10 +1,7 @@
 package dev.lyze.gdxUnBox2d;
 
 import com.badlogic.gdx.utils.Array;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.var;
+import lombok.*;
 
 /**
  * Main game object of the UnBox library. Holds a Box2D body and behaviours.
@@ -189,5 +186,14 @@ public final class GameObject {
 
     public Box2dBehaviour getBox2dBehaviour() {
         return getBehaviour(Box2dBehaviour.class);
+    }
+
+    @Override
+    public String toString() {
+        return "GameObject{" +
+                "name='" + name + '\'' +
+                ", state=" + state +
+                ", enabled=" + enabled +
+                '}';
     }
 }
