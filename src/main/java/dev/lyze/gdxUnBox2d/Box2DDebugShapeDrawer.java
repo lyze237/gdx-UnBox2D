@@ -369,6 +369,10 @@ public class Box2DDebugShapeDrawer {
         this.drawContacts = drawContacts;
     }
 
+    public void setShapeDrawer(ShapeDrawer shapeDrawer) {
+        this.shapeDrawer = shapeDrawer;
+    }
+
     public static Vector2 getAxis() {
         return axis;
     }
