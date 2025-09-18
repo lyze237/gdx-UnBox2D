@@ -31,6 +31,18 @@ public class CreateBoxFixtureBehaviour extends CreateFixtureBehaviour {
      * 
      * @param hx         The half width
      * @param hy         The half height
+     * @param fixtureDef The fixture definition to use as template.
+     * @param gameObject The game object to attach to.
+     */
+    public CreateBoxFixtureBehaviour(float hx, float hy, FixtureDef fixtureDef, GameObject gameObject) {
+        this(hx, hy, Vector2.Zero, fixtureDef, gameObject);
+    }
+
+    /**
+     * Creates a box fixture in awake with the provided parameters.
+     * 
+     * @param hx         The half width
+     * @param hy         The half height
      * @param position   The center of the box
      * @param gameObject The game object to attach to.
      */

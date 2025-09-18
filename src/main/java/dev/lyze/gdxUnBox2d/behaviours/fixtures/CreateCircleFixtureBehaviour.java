@@ -3,6 +3,7 @@ package dev.lyze.gdxUnBox2d.behaviours.fixtures;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+
 import dev.lyze.gdxUnBox2d.GameObject;
 
 /**
@@ -19,6 +20,18 @@ public class CreateCircleFixtureBehaviour extends CreateFixtureBehaviour {
      */
     public CreateCircleFixtureBehaviour(float radius, GameObject gameObject) {
         this(Vector2.Zero, radius, gameObject);
+    }
+
+
+    /**
+     * Creates a circle fixture in awake with the provided parameters.
+     * 
+     * @param radius     The radius of the circle.
+     * @param fixtureDef The fixture definition to use as template.
+     * @param gameObject The game object to attach to.
+     */
+    public CreateCircleFixtureBehaviour(float radius, FixtureDef fixtureDef, GameObject gameObject) {
+        this(Vector2.Zero, radius, fixtureDef, gameObject);
     }
 
     /**
