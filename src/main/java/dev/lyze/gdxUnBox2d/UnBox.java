@@ -1,5 +1,7 @@
 package dev.lyze.gdxUnBox2d;
 
+import java.util.Comparator;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -9,9 +11,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.OrderedMap;
+
 import dev.lyze.gdxUnBox2d.options.Box2dPhysicsOptions;
-import java.util.Comparator;
 import lombok.Getter;
 import lombok.var;
 import space.earlygrey.shapedrawer.ShapeDrawer;
@@ -46,6 +49,8 @@ public class UnBox {
 
     final Array<Behaviour> behavioursToAdd = new Array<>();
     private final Array<Behaviour> behavioursToDestroy = new Array<>();
+
+    private ObjectMap<String, ObjectMap<Class<?>, Object>> singletons = new ObjectMap<>();
 
     /**
      * Instantiates an instance of this object with a Box2D World with (0, 0)
@@ -522,5 +527,53 @@ public class UnBox {
         }
 
         return null;
+    }
+
+    /**
+     * Inserts a simple singleton into the system.
+     *
+     * The key value is set to 'default' for this singleton.
+     * @param obj The singleton.
+     */
+    public void insertSingleton(Object obj) {
+        insertSingleton("default", obj);
+    }
+
+    /**
+     * Inserts a simple singleton into the system with a key value.
+     *
+     * @param key The keyed value.
+     * @param obj The singleton.
+     */
+    public void insertSingleton(String key, Object obj) {
+        if (!singletons.containsKey(key))
+            singletons.put(key, new ObjectMap<>());
+
+        singletons.get(key).put(obj.getClass(), obj);
+    }
+
+    /**
+     * Gets a simple singleton from the system with the 'default' key value.
+     *
+     * @param type The type of the singleton.
+     * @return The singleton or null if the type doesn't exist.
+     */
+    public <T> T getSingleton(Class<T> type) {
+        return getSingleton("default", type);
+    }
+
+    /**
+     * Gets a simple singleton from the system.
+     *
+     * @param key The key of the singleton.
+     * @param type The type of the singleton.
+     * @return The singleton or null if the type doesn't exist.
+     */
+    public <T> T getSingleton(String key, Class<T> type) {
+        var arr = singletons.get(key);
+        if (arr == null)
+            return null;
+
+        return (T) arr.get(type);
     }
 }
