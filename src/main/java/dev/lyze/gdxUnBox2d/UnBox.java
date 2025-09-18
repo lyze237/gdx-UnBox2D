@@ -530,7 +530,7 @@ public class UnBox {
     }
 
     /**
-     * Inserts a simple singleton into the system.
+     * Inserts a singleton into the system.
      *
      * The key value is set to 'default' for this singleton.
      * @param obj The singleton.
@@ -540,20 +540,41 @@ public class UnBox {
     }
 
     /**
-     * Inserts a simple singleton into the system with a key value.
+     * Inserts a singleton into the system with a different type.
+     *
+     * The key value is set to 'default' for this singleton.
+     * @param type The type the class should be represented. For example if you want to `getSingleton(Viewport.class)` you can use this to store an `insertSingleton(Viewport.class, new ExtendViewport(...))`
+     * @param obj The singleton.
+     */
+    public <T> void insertSingleton(Class<T> type, Object obj) {
+        insertSingleton("default", type, obj);
+    }
+
+    /**
+     * Inserts a singleton into the system with a key value.
      *
      * @param key The keyed value.
      * @param obj The singleton.
      */
-    public void insertSingleton(String key, Object obj) {
-        if (!singletons.containsKey(key))
-            singletons.put(key, new ObjectMap<>());
-
-        singletons.get(key).put(obj.getClass(), obj);
+    public <T> void insertSingleton(String key, Object obj) {
+        insertSingleton(key, obj.getClass(), obj);
     }
 
     /**
-     * Gets a simple singleton from the system with the 'default' key value.
+     * Inserts a singleton into the system with a key value.
+     *
+     * @param key The keyed value.
+     * @param obj The singleton.
+     */
+    public <T> void insertSingleton(String key, Class<T> type, Object obj) {
+        if (!singletons.containsKey(key))
+            singletons.put(key, new ObjectMap<>());
+
+        singletons.get(key).put(type, obj);
+    }
+
+    /**
+     * Gets a singleton from the system with the 'default' key value.
      *
      * @param type The type of the singleton.
      * @return The singleton or null if the type doesn't exist.
